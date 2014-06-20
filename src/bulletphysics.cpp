@@ -11,4 +11,8 @@ initbulletphysics(void)
 	pybulletphysics_add_DbvtBroadphase(m);
 	pybulletphysics_add_DefaultCollisionConfiguration(m);
 	pybulletphysics_add_CollisionDispatcher(m);
+	pybulletphysics_add_SequentialImpulseConstraintSolver(m);
+	pybulletphysics_add_DiscreteDynamicsWorld(m);
+	pybulletphysics_add_Vector3(m);
+	pybulletphysics_add_Quaternion(m);
 }
