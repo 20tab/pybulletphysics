@@ -1,10 +1,5 @@
 #include "pybulletphysics.h"
 
-typedef struct {
-        PyObject_HEAD
-        btBroadphaseInterface *broadphase;
-} bulletphysics_DbvtBroadphaseObject;
-
 static void
 DbvtBroadphase_dealloc(bulletphysics_DbvtBroadphaseObject* self)
 {
