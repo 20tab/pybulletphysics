@@ -13,6 +13,16 @@ DbvtBroadphase_dealloc(bulletphysics_DbvtBroadphaseObject* self)
 	self->ob_type->tp_free((PyObject*)self);
 }
 
+static PyObject*
+DbvtBroadphase_new(PyTypeObject *type, PyObject *args, PyObject *kwds)
+{
+	bulletphysics_DbvtBroadphaseObject *self = (bulletphysics_DbvtBroadphaseObject *)type->tp_alloc(type, 0);
+    	if (self != NULL) {
+		self->broadphase = new btDbvtBroadphase();
+	}
+	return (PyObject *)self;
+}
+
 static PyTypeObject bulletphysics_DbvtBroadphaseType = {
     PyObject_HEAD_INIT(NULL)
     0,                         /*ob_size*/
@@ -48,7 +58,7 @@ initbulletphysics(void)
 {
 	PyObject* m;
 
-	bulletphysics_DbvtBroadphaseType.tp_new = PyType_GenericNew;
+	bulletphysics_DbvtBroadphaseType.tp_new = DbvtBroadphase_new;
 
 	if (PyType_Ready(&bulletphysics_DbvtBroadphaseType) < 0)
         	return;
