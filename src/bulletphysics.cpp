@@ -15,4 +15,6 @@ initbulletphysics(void)
 	pybulletphysics_add_DiscreteDynamicsWorld(m);
 	pybulletphysics_add_Vector3(m);
 	pybulletphysics_add_Quaternion(m);
+	pybulletphysics_add_StaticPlaneShape(m);
+	pybulletphysics_add_SphereShape(m);
 }

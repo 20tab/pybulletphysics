@@ -16,6 +16,8 @@ mod = Extension('bulletphysics',
                         'src/DiscreteDynamicsWorld.cpp',
                         'src/Vector3.cpp',
                         'src/Quaternion.cpp',
+                        'src/StaticPlaneShape.cpp',
+                        'src/SphereShape.cpp',
                     ],
                     extra_compile_args=pkgconfig('--cflags', 'bullet'),
                     extra_link_args=pkgconfig('--libs', 'bullet'))

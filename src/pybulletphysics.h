@@ -8,6 +8,8 @@ void pybulletphysics_add_SequentialImpulseConstraintSolver(PyObject *);
 void pybulletphysics_add_DiscreteDynamicsWorld(PyObject *);
 void pybulletphysics_add_Vector3(PyObject *);
 void pybulletphysics_add_Quaternion(PyObject *);
+void pybulletphysics_add_StaticPlaneShape(PyObject *);
+void pybulletphysics_add_SphereShape(PyObject *);
 
 typedef struct {
         PyObject_HEAD
@@ -45,3 +47,13 @@ typedef struct {
         PyObject_HEAD
         btQuaternion *quaternion;
 } bulletphysics_QuaternionObject;
+
+typedef struct {
+        PyObject_HEAD
+        btCollisionShape *plane;
+} bulletphysics_StaticPlaneShapeObject;
+
+typedef struct {
+        PyObject_HEAD
+        btCollisionShape *sphere;
+} bulletphysics_SphereShapeObject;
