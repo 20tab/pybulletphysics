@@ -25,7 +25,7 @@ Quaternion_new(PyTypeObject *type, PyObject *args, PyObject *kwds)
         return (PyObject *)self;
 }
 
-static PyTypeObject bulletphysics_QuaternionType = {
+PyTypeObject bulletphysics_QuaternionType = {
     PyObject_HEAD_INIT(NULL)
     0,                         /*ob_size*/
     "bulletphysics.Quaternion", /*tp_name*/
@@ -50,7 +50,36 @@ static PyTypeObject bulletphysics_QuaternionType = {
     "Quaternion object",           /* tp_doc */
 };
 
+static PyObject *
+Quaternion_getX(bulletphysics_QuaternionObject *self, PyObject *args, PyObject *kwds) {
+        return PyFloat_FromDouble(self->quaternion->getX());
+}
+
+static PyObject *
+Quaternion_getY(bulletphysics_QuaternionObject *self, PyObject *args, PyObject *kwds) {
+        return PyFloat_FromDouble(self->quaternion->getY());
+}
+
+static PyObject *
+Quaternion_getZ(bulletphysics_QuaternionObject *self, PyObject *args, PyObject *kwds) {
+        return PyFloat_FromDouble(self->quaternion->getZ());
+}
+
+static PyObject *
+Quaternion_getW(bulletphysics_QuaternionObject *self, PyObject *args, PyObject *kwds) {
+        return PyFloat_FromDouble(self->quaternion->getW());
+}
+
+static PyMethodDef Quaternion_methods[] = {
+    {"getX", (PyCFunction)Quaternion_getX, METH_VARARGS, NULL },
+    {"getY", (PyCFunction)Quaternion_getY, METH_VARARGS, NULL },
+    {"getZ", (PyCFunction)Quaternion_getZ, METH_VARARGS, NULL },
+    {"getW", (PyCFunction)Quaternion_getW, METH_VARARGS, NULL },
+    {NULL, NULL, 0, NULL}
+};
+
 void pybulletphysics_add_Quaternion(PyObject *module) {
+	bulletphysics_QuaternionType.tp_methods = Quaternion_methods;
 	bulletphysics_QuaternionType.tp_new = Quaternion_new;
 
         if (PyType_Ready(&bulletphysics_QuaternionType) < 0)

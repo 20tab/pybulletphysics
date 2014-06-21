@@ -54,14 +54,16 @@ box_rigidbody = RigidBody(box_rigidbody_info)
 
 world.addRigidBody(box_rigidbody)
 
-box_rigidbody.applyCentralForce( Vector3(0.0, 0.0, 200.0) )
+box_rigidbody.applyForce( Vector3(0.0, 0.0, 200.0), Vector3(0.0, 5.0, 0.0) )
 
 trans = Transform()
 
 for i in range(0, 30000):
     world.stepSimulation(1/60.0, 10)
     box_motionstate.getWorldTransform(trans)
-    print trans.getOrigin().getX(), trans.getOrigin().getY(), trans.getOrigin().getZ()
+    origin = trans.getOrigin()
+    rot = trans.getRotation()
+    print origin.getX(), origin.getY(), origin.getZ(), rot.getX(), rot.getY(), rot.getZ(), rot.getW()
 
 
 world.removeRigidBody(box_rigidbody)

@@ -1,6 +1,7 @@
 #include "pybulletphysics.h"
 
 extern PyTypeObject bulletphysics_Vector3Type;
+extern PyTypeObject bulletphysics_QuaternionType;
 
 static void
 Transform_dealloc(bulletphysics_TransformObject* self)
@@ -75,8 +76,18 @@ Transform_getOrigin(bulletphysics_TransformObject *self, PyObject *args, PyObjec
         return self->origin;
 }
 
+static PyObject *
+Transform_getRotation(bulletphysics_TransformObject *self, PyObject *args, PyObject *kwds) {
+	btQuaternion r = self->transform->getRotation();
+	PyObject *argList = Py_BuildValue("ffff", r.getX(), r.getY(), r.getZ(), r.getW());
+        PyObject *py_q = PyObject_CallObject((PyObject *) &bulletphysics_QuaternionType, argList);
+        Py_DECREF(argList);
+        return py_q;
+}
+
 static PyMethodDef Transform_methods[] = {
     {"getOrigin", (PyCFunction)Transform_getOrigin, METH_VARARGS, NULL },
+    {"getRotation", (PyCFunction)Transform_getRotation, METH_VARARGS, NULL },
     {NULL, NULL, 0, NULL}
 };
 
