@@ -1,9 +1,9 @@
 #include "pybulletphysics.h"
 
 static void
-StaticPlaneShape_dealloc(bulletphysics_StaticPlaneShapeObject* self)
+StaticPlaneShape_dealloc(bulletphysics_CollisionShapeObject* self)
 {
-        delete(self->plane);
+        delete(self->shape);
         self->ob_type->tp_free((PyObject*)self);
 }
 
@@ -16,10 +16,10 @@ StaticPlaneShape_new(PyTypeObject *type, PyObject *args, PyObject *kwds)
         	return NULL;
     	}
 
-        bulletphysics_StaticPlaneShapeObject *self = (bulletphysics_StaticPlaneShapeObject *)type->tp_alloc(type, 0);
+        bulletphysics_CollisionShapeObject *self = (bulletphysics_CollisionShapeObject *)type->tp_alloc(type, 0);
         if (self != NULL) {
 		bulletphysics_Vector3Object *vector3 = (bulletphysics_Vector3Object *) py_vector3;
-                self->plane = new btStaticPlaneShape(*(vector3->vector), planeConstant );
+                self->shape = new btStaticPlaneShape(*(vector3->vector), planeConstant );
         }
         return (PyObject *)self;
 }
@@ -28,7 +28,7 @@ static PyTypeObject bulletphysics_StaticPlaneShapeType = {
     PyObject_HEAD_INIT(NULL)
     0,                         /*ob_size*/
     "bulletphysics.StaticPlaneShape", /*tp_name*/
-    sizeof(bulletphysics_StaticPlaneShapeObject), /*tp_basicsize*/
+    sizeof(bulletphysics_CollisionShapeObject), /*tp_basicsize*/
     0,                         /*tp_itemsize*/
     (destructor)StaticPlaneShape_dealloc,    /*tp_dealloc*/
     0,                         /*tp_print*/

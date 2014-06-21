@@ -17,4 +17,8 @@ initbulletphysics(void)
 	pybulletphysics_add_Quaternion(m);
 	pybulletphysics_add_StaticPlaneShape(m);
 	pybulletphysics_add_SphereShape(m);
+	pybulletphysics_add_Transform(m);
+	pybulletphysics_add_DefaultMotionState(m);
+	pybulletphysics_add_RigidBodyConstructionInfo(m);
+	pybulletphysics_add_RigidBody(m);
 }

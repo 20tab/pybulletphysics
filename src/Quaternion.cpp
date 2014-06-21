@@ -14,7 +14,7 @@ Quaternion_new(PyTypeObject *type, PyObject *args, PyObject *kwds)
 	float y = 0.0;
 	float z = 0.0;
 	float w = 0.0;
-	if (!PyArg_ParseTuple(args, "ffff", &x, &y, &z)) {
+	if (!PyArg_ParseTuple(args, "ffff", &x, &y, &z, &w)) {
         	return NULL;
     	}
 

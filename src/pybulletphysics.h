@@ -10,6 +10,10 @@ void pybulletphysics_add_Vector3(PyObject *);
 void pybulletphysics_add_Quaternion(PyObject *);
 void pybulletphysics_add_StaticPlaneShape(PyObject *);
 void pybulletphysics_add_SphereShape(PyObject *);
+void pybulletphysics_add_Transform(PyObject *);
+void pybulletphysics_add_DefaultMotionState(PyObject *);
+void pybulletphysics_add_RigidBodyConstructionInfo(PyObject *);
+void pybulletphysics_add_RigidBody(PyObject *);
 
 typedef struct {
         PyObject_HEAD
@@ -50,10 +54,25 @@ typedef struct {
 
 typedef struct {
         PyObject_HEAD
-        btCollisionShape *plane;
-} bulletphysics_StaticPlaneShapeObject;
+        btCollisionShape *shape;
+} bulletphysics_CollisionShapeObject;
 
 typedef struct {
         PyObject_HEAD
-        btCollisionShape *sphere;
-} bulletphysics_SphereShapeObject;
+        btTransform *transform;
+} bulletphysics_TransformObject;
+
+typedef struct {
+        PyObject_HEAD
+        btDefaultMotionState *motionState;
+} bulletphysics_DefaultMotionStateObject;
+
+typedef struct {
+        PyObject_HEAD
+        btRigidBody::btRigidBodyConstructionInfo *constructionInfo;
+} bulletphysics_RigidBodyConstructionInfoObject;
+
+typedef struct {
+        PyObject_HEAD
+        btRigidBody *rigidBody;
+} bulletphysics_RigidBodyObject;
