@@ -3,7 +3,8 @@
 static void
 Vector3_dealloc(bulletphysics_Vector3Object* self)
 {
-        delete(self->vector);
+	if (self->vector)
+        	delete(self->vector);
         self->ob_type->tp_free((PyObject*)self);
 }
 
@@ -24,7 +25,7 @@ Vector3_new(PyTypeObject *type, PyObject *args, PyObject *kwds)
         return (PyObject *)self;
 }
 
-static PyTypeObject bulletphysics_Vector3Type = {
+PyTypeObject bulletphysics_Vector3Type = {
     PyObject_HEAD_INIT(NULL)
     0,                         /*ob_size*/
     "bulletphysics.Vector3", /*tp_name*/

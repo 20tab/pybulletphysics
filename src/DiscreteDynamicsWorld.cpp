@@ -71,9 +71,24 @@ DiscreteDynamicsWorld_stepSimulation(bulletphysics_DiscreteDynamicsWorldObject *
         return PyInt_FromLong(ret);
 }
 
+static PyObject *
+DiscreteDynamicsWorld_removeRigidBody(bulletphysics_DiscreteDynamicsWorldObject *self, PyObject *args, PyObject *kwds) {
+        PyObject *py_rigidBody = NULL;
+        if (!PyArg_ParseTuple(args, "O", &py_rigidBody)) {
+                return NULL;
+        }
+
+        bulletphysics_RigidBodyObject *rigidBody = (bulletphysics_RigidBodyObject *) py_rigidBody;
+        self->world->removeRigidBody(rigidBody->rigidBody);
+
+        Py_INCREF(Py_None);
+        return Py_None;
+}
+
 static PyMethodDef DiscreteDynamicsWorld_methods[] = {
     {"setGravity", (PyCFunction)DiscreteDynamicsWorld_setGravity, METH_VARARGS, NULL },
     {"addRigidBody", (PyCFunction)DiscreteDynamicsWorld_addRigidBody, METH_VARARGS, NULL },
+    {"removeRigidBody", (PyCFunction)DiscreteDynamicsWorld_removeRigidBody, METH_VARARGS, NULL },
     {"stepSimulation", (PyCFunction)DiscreteDynamicsWorld_stepSimulation, METH_VARARGS, NULL },
     {NULL, NULL, 0, NULL}
 };

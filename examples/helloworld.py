@@ -54,8 +54,8 @@ print local_inertia.getX()
 print local_inertia.getY()
 print local_inertia.getZ()
 
-# 1 is the mass, the last vector is the Inertia (???)
-fall_rigidbody_info = RigidBodyConstructionInfo(1, fall_motionstate, fall, Vector3(0,0,0))
+# 1 is the mass, the last vector is the Inertia
+fall_rigidbody_info = RigidBodyConstructionInfo(1, fall_motionstate, fall, local_inertia)
 
 fall_rigidbody = RigidBody(fall_rigidbody_info)
 
@@ -65,10 +65,8 @@ trans = Transform()
 
 for i in range(0, 300):
     world.stepSimulation(1/60.0, 10)
-
-    fall_rigidbody.getMotionState().getWorldTransform(transform)
-
-    print trans.getOrigin().y
+    fall_motionstate.getWorldTransform(trans)
+    print trans.getOrigin().getY()
 
 
 world.removeRigidBody(fall_rigidbody)

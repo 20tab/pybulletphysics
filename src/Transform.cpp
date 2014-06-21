@@ -1,8 +1,13 @@
 #include "pybulletphysics.h"
 
+extern PyTypeObject bulletphysics_Vector3Type;
+
 static void
 Transform_dealloc(bulletphysics_TransformObject* self)
 {
+	// vector will be freed by the transform
+	((bulletphysics_Vector3Object *)self->origin)->vector = NULL;
+	Py_DECREF(self->origin);
         delete(self->transform);
         self->ob_type->tp_free((PyObject*)self);
 }
@@ -27,6 +32,14 @@ Transform_new(PyTypeObject *type, PyObject *args, PyObject *kwds)
 		else {
 			self->transform = new btTransform();
 		}
+		// optimization: map a new Vector3() object to the origin
+		PyObject *argList = Py_BuildValue("fff", 0.0, 0.0, 0.0);
+		PyObject *py_origin = PyObject_CallObject((PyObject *) &bulletphysics_Vector3Type, argList);
+		Py_DECREF(argList);
+		self->origin = py_origin;
+		// delete the original vector
+		delete(((bulletphysics_Vector3Object *)self->origin)->vector);
+		((bulletphysics_Vector3Object *)self->origin)->vector = &self->transform->getOrigin();
         }
         return (PyObject *)self;
 }
@@ -56,7 +69,19 @@ static PyTypeObject bulletphysics_TransformType = {
     "Transform object",           /* tp_doc */
 };
 
+static PyObject *
+Transform_getOrigin(bulletphysics_TransformObject *self, PyObject *args, PyObject *kwds) {
+	Py_INCREF(self->origin);
+        return self->origin;
+}
+
+static PyMethodDef Transform_methods[] = {
+    {"getOrigin", (PyCFunction)Transform_getOrigin, METH_VARARGS, NULL },
+    {NULL, NULL, 0, NULL}
+};
+
 void pybulletphysics_add_Transform(PyObject *module) {
+	bulletphysics_TransformType.tp_methods = Transform_methods;
 	bulletphysics_TransformType.tp_new = Transform_new;
 
         if (PyType_Ready(&bulletphysics_TransformType) < 0)

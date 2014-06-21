@@ -61,6 +61,7 @@ typedef struct {
 typedef struct {
         PyObject_HEAD
         btTransform *transform;
+	PyObject *origin;
 } bulletphysics_TransformObject;
 
 typedef struct {
