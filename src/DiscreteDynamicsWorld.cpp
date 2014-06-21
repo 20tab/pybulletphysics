@@ -44,8 +44,37 @@ DiscreteDynamicsWorld_setGravity(bulletphysics_DiscreteDynamicsWorldObject *self
 	return Py_None;
 }
 
+static PyObject *
+DiscreteDynamicsWorld_addRigidBody(bulletphysics_DiscreteDynamicsWorldObject *self, PyObject *args, PyObject *kwds) {
+	PyObject *py_rigidBody = NULL;
+	if (!PyArg_ParseTuple(args, "O", &py_rigidBody)) {
+                return NULL;
+        }
+
+	bulletphysics_RigidBodyObject *rigidBody = (bulletphysics_RigidBodyObject *) py_rigidBody;
+	self->world->addRigidBody(rigidBody->rigidBody);
+
+	Py_INCREF(Py_None);
+	return Py_None;
+}
+
+static PyObject *
+DiscreteDynamicsWorld_stepSimulation(bulletphysics_DiscreteDynamicsWorldObject *self, PyObject *args, PyObject *kwds) {
+	float ts = 0.0;
+	float substeps = 1;
+        if (!PyArg_ParseTuple(args, "f|f", &ts, &substeps)) {
+                return NULL;
+        }
+
+        int ret = self->world->stepSimulation(ts, substeps);
+
+        return PyInt_FromLong(ret);
+}
+
 static PyMethodDef DiscreteDynamicsWorld_methods[] = {
     {"setGravity", (PyCFunction)DiscreteDynamicsWorld_setGravity, METH_VARARGS, NULL },
+    {"addRigidBody", (PyCFunction)DiscreteDynamicsWorld_addRigidBody, METH_VARARGS, NULL },
+    {"stepSimulation", (PyCFunction)DiscreteDynamicsWorld_stepSimulation, METH_VARARGS, NULL },
     {NULL, NULL, 0, NULL}
 };
 

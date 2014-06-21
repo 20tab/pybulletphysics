@@ -46,7 +46,13 @@ world.addRigidBody(ground_rigidbody)
 
 fall_motionstate = DefaultMotionState( Transform(Quaternion(0,0,0,1), Vector3(0, 50,0)) )
 
-fall.calculateLocalInertia(1, Vector3(0,0,0))
+local_inertia = Vector3(0,0,0)
+
+fall.calculateLocalInertia(1, local_inertia)
+
+print local_inertia.getX()
+print local_inertia.getY()
+print local_inertia.getZ()
 
 # 1 is the mass, the last vector is the Inertia (???)
 fall_rigidbody_info = RigidBodyConstructionInfo(1, fall_motionstate, fall, Vector3(0,0,0))

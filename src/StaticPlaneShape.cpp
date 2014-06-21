@@ -1,12 +1,5 @@
 #include "pybulletphysics.h"
 
-static void
-StaticPlaneShape_dealloc(bulletphysics_CollisionShapeObject* self)
-{
-        delete(self->shape);
-        self->ob_type->tp_free((PyObject*)self);
-}
-
 static PyObject*
 StaticPlaneShape_new(PyTypeObject *type, PyObject *args, PyObject *kwds)
 {
@@ -30,7 +23,7 @@ static PyTypeObject bulletphysics_StaticPlaneShapeType = {
     "bulletphysics.StaticPlaneShape", /*tp_name*/
     sizeof(bulletphysics_CollisionShapeObject), /*tp_basicsize*/
     0,                         /*tp_itemsize*/
-    (destructor)StaticPlaneShape_dealloc,    /*tp_dealloc*/
+    0,				/*tp_dealloc*/
     0,                         /*tp_print*/
     0,                         /*tp_getattr*/
     0,                         /*tp_setattr*/
@@ -49,7 +42,10 @@ static PyTypeObject bulletphysics_StaticPlaneShapeType = {
     "StaticPlaneShape object",           /* tp_doc */
 };
 
+extern PyTypeObject bulletphysics_CollisionShapeType;
+
 void pybulletphysics_add_StaticPlaneShape(PyObject *module) {
+	bulletphysics_StaticPlaneShapeType.tp_base = &bulletphysics_CollisionShapeType;
 	bulletphysics_StaticPlaneShapeType.tp_new = StaticPlaneShape_new;
 
         if (PyType_Ready(&bulletphysics_StaticPlaneShapeType) < 0)

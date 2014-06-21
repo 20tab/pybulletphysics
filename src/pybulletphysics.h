@@ -9,6 +9,7 @@ void pybulletphysics_add_DiscreteDynamicsWorld(PyObject *);
 void pybulletphysics_add_Vector3(PyObject *);
 void pybulletphysics_add_Quaternion(PyObject *);
 void pybulletphysics_add_StaticPlaneShape(PyObject *);
+void pybulletphysics_add_CollisionShape(PyObject *);
 void pybulletphysics_add_SphereShape(PyObject *);
 void pybulletphysics_add_Transform(PyObject *);
 void pybulletphysics_add_DefaultMotionState(PyObject *);
@@ -76,3 +77,4 @@ typedef struct {
         PyObject_HEAD
         btRigidBody *rigidBody;
 } bulletphysics_RigidBodyObject;
+

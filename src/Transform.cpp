@@ -13,13 +13,9 @@ Transform_new(PyTypeObject *type, PyObject *args, PyObject *kwds)
 	PyObject *py_quaternion = NULL;
 	PyObject *py_vector3 = NULL;
 
-	printf("%p %p\n", py_quaternion, py_vector3);
-
 	if (!PyArg_ParseTuple(args, "|OO", &py_quaternion, &py_vector3)) {
         	return NULL;
     	}
-
-	printf("%p %p\n", py_quaternion, py_vector3);
 
         bulletphysics_TransformObject *self = (bulletphysics_TransformObject *)type->tp_alloc(type, 0);
         if (self != NULL) {

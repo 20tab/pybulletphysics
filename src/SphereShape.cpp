@@ -1,12 +1,5 @@
 #include "pybulletphysics.h"
 
-static void
-SphereShape_dealloc(bulletphysics_CollisionShapeObject* self)
-{
-        delete(self->shape);
-        self->ob_type->tp_free((PyObject*)self);
-}
-
 static PyObject*
 SphereShape_new(PyTypeObject *type, PyObject *args, PyObject *kwds)
 {
@@ -28,7 +21,7 @@ static PyTypeObject bulletphysics_SphereShapeType = {
     "bulletphysics.SphereShape", /*tp_name*/
     sizeof(bulletphysics_CollisionShapeObject), /*tp_basicsize*/
     0,                         /*tp_itemsize*/
-    (destructor)SphereShape_dealloc,    /*tp_dealloc*/
+    0,				/*tp_dealloc*/
     0,                         /*tp_print*/
     0,                         /*tp_getattr*/
     0,                         /*tp_setattr*/
@@ -47,7 +40,10 @@ static PyTypeObject bulletphysics_SphereShapeType = {
     "SphereShape object",           /* tp_doc */
 };
 
+extern PyTypeObject bulletphysics_CollisionShapeType;
+
 void pybulletphysics_add_SphereShape(PyObject *module) {
+	bulletphysics_SphereShapeType.tp_base = &bulletphysics_CollisionShapeType;
 	bulletphysics_SphereShapeType.tp_new = SphereShape_new;
 
         if (PyType_Ready(&bulletphysics_SphereShapeType) < 0)

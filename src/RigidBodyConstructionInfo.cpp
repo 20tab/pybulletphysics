@@ -21,7 +21,7 @@ RigidBodyConstructionInfo_new(PyTypeObject *type, PyObject *args, PyObject *kwds
 
         bulletphysics_RigidBodyConstructionInfoObject *self = (bulletphysics_RigidBodyConstructionInfoObject *)type->tp_alloc(type, 0);
         if (self != NULL) {
-		bulletphysics_DefaultMotionStateObject *motionState = (bulletphysics_DefaultMotionStateObject *) py_vector3;
+		bulletphysics_DefaultMotionStateObject *motionState = (bulletphysics_DefaultMotionStateObject *) py_motionState;
 		bulletphysics_CollisionShapeObject *shape = (bulletphysics_CollisionShapeObject *) py_shape;
 		bulletphysics_Vector3Object *vector3 = (bulletphysics_Vector3Object *) py_vector3;
                 self->constructionInfo = new btRigidBody::btRigidBodyConstructionInfo(mass, motionState->motionState, shape->shape, *(vector3->vector));

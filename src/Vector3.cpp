@@ -49,7 +49,30 @@ static PyTypeObject bulletphysics_Vector3Type = {
     "Vector3 object",           /* tp_doc */
 };
 
+static PyObject *
+Vector3_getX(bulletphysics_Vector3Object *self, PyObject *args, PyObject *kwds) {
+        return PyFloat_FromDouble(self->vector->getX());
+}
+
+static PyObject *
+Vector3_getY(bulletphysics_Vector3Object *self, PyObject *args, PyObject *kwds) {
+        return PyFloat_FromDouble(self->vector->getY());
+}
+
+static PyObject *
+Vector3_getZ(bulletphysics_Vector3Object *self, PyObject *args, PyObject *kwds) {
+        return PyFloat_FromDouble(self->vector->getZ());
+}
+
+static PyMethodDef Vector3_methods[] = {
+    {"getX", (PyCFunction)Vector3_getX, METH_VARARGS, NULL },
+    {"getY", (PyCFunction)Vector3_getY, METH_VARARGS, NULL },
+    {"getZ", (PyCFunction)Vector3_getZ, METH_VARARGS, NULL },
+    {NULL, NULL, 0, NULL}
+};
+
 void pybulletphysics_add_Vector3(PyObject *module) {
+	bulletphysics_Vector3Type.tp_methods = Vector3_methods;
 	bulletphysics_Vector3Type.tp_new = Vector3_new;
 
         if (PyType_Ready(&bulletphysics_Vector3Type) < 0)
