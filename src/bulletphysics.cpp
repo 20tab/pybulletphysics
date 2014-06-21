@@ -22,4 +22,5 @@ initbulletphysics(void)
 	pybulletphysics_add_DefaultMotionState(m);
 	pybulletphysics_add_RigidBodyConstructionInfo(m);
 	pybulletphysics_add_RigidBody(m);
+	pybulletphysics_add_BoxShape(m);
 }

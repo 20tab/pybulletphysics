@@ -15,6 +15,7 @@ void pybulletphysics_add_Transform(PyObject *);
 void pybulletphysics_add_DefaultMotionState(PyObject *);
 void pybulletphysics_add_RigidBodyConstructionInfo(PyObject *);
 void pybulletphysics_add_RigidBody(PyObject *);
+void pybulletphysics_add_BoxShape(PyObject *);
 
 typedef struct {
         PyObject_HEAD

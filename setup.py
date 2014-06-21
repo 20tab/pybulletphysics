@@ -23,6 +23,7 @@ mod = Extension('bulletphysics',
                         'src/DefaultMotionState.cpp',
                         'src/RigidBodyConstructionInfo.cpp',
                         'src/RigidBody.cpp',
+                        'src/BoxShape.cpp',
                     ],
                     extra_compile_args=pkgconfig('--cflags', 'bullet'),
                     extra_link_args=pkgconfig('--libs', 'bullet'))
