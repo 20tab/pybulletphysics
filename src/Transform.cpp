@@ -85,9 +85,33 @@ Transform_getRotation(bulletphysics_TransformObject *self, PyObject *args, PyObj
         return py_q;
 }
 
+static PyObject *
+Transform_getOpenGLMatrix(bulletphysics_TransformObject *self, PyObject *args, PyObject *kwds) {
+	PyObject *py_list = NULL;
+	if (!PyArg_ParseTuple(args, "O", &py_list)) {
+                return NULL;
+        }
+
+	if (!PyList_Check(py_list) || PyList_Size(py_list) < 16) {
+		PyErr_SetString(PyExc_TypeError, "expected a 16-element list");
+                return NULL;
+	}
+
+	btScalar m[16];
+	self->transform->getOpenGLMatrix(m);
+	int i;
+	for(i=0;i<16;i++) {
+		PyList_SetItem(py_list, i, PyFloat_FromDouble(m[i]));
+	}
+
+	Py_INCREF(Py_None);
+	return Py_None;
+}
+
 static PyMethodDef Transform_methods[] = {
     {"getOrigin", (PyCFunction)Transform_getOrigin, METH_VARARGS, NULL },
     {"getRotation", (PyCFunction)Transform_getRotation, METH_VARARGS, NULL },
+    {"getOpenGLMatrix", (PyCFunction)Transform_getOpenGLMatrix, METH_VARARGS, NULL },
     {NULL, NULL, 0, NULL}
 };
 
