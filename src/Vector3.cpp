@@ -46,9 +46,30 @@ PyTypeObject bulletphysics_Vector3Type = {
     0,                         /*tp_getattro*/
     0,                         /*tp_setattro*/
     0,                         /*tp_as_buffer*/
-    Py_TPFLAGS_DEFAULT|Py_TPFLAGS_BASETYPE, /*tp_flags*/
+    Py_TPFLAGS_DEFAULT|Py_TPFLAGS_BASETYPE|Py_TPFLAGS_CHECKTYPES, /*tp_flags*/
     "Vector3 object",           /* tp_doc */
 };
+
+static PyObject *new_pyvector3_from_vector(btVector3 v) {
+	bulletphysics_Vector3Object *py_vector3 = (bulletphysics_Vector3Object *)bulletphysics_Vector3Type.tp_alloc(&bulletphysics_Vector3Type, 0);
+	if (py_vector3) {
+		py_vector3->vector = new btVector3(v.getX(), v.getY(), v.getZ());
+		Py_INCREF(py_vector3);
+	}
+	return (PyObject *)py_vector3;
+}
+
+static PyObject *
+Vector3_add(bulletphysics_Vector3Object *self, PyObject *py_vector3) {
+	pybulletphysics_checktype(py_vector3, Vector3);
+	return new_pyvector3_from_vector( *self->vector + *(((bulletphysics_Vector3Object *)py_vector3)->vector));
+}
+
+static PyObject *
+Vector3_mul(bulletphysics_Vector3Object *self, PyObject *py_vector3) {
+        pybulletphysics_checktype(py_vector3, Vector3);
+        return new_pyvector3_from_vector( *self->vector * *(((bulletphysics_Vector3Object *)py_vector3)->vector));
+}
 
 static PyObject *
 Vector3_getX(bulletphysics_Vector3Object *self, PyObject *args, PyObject *kwds) {
@@ -72,7 +93,15 @@ static PyMethodDef Vector3_methods[] = {
     {NULL, NULL, 0, NULL}
 };
 
+PyNumberMethods Vector3_number_methods;
+
 void pybulletphysics_add_Vector3(PyObject *module) {
+	memset(&Vector3_number_methods, 0, sizeof(PyNumberMethods));
+	bulletphysics_Vector3Type.tp_as_number = &Vector3_number_methods;
+
+	Vector3_number_methods.nb_add = (binaryfunc)Vector3_add;
+	Vector3_number_methods.nb_multiply = (binaryfunc)Vector3_mul;
+
 	bulletphysics_Vector3Type.tp_methods = Vector3_methods;
 	bulletphysics_Vector3Type.tp_new = Vector3_new;
 

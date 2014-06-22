@@ -1,6 +1,11 @@
 #include <Python.h>
 #include <btBulletDynamicsCommon.h>
 
+#define pybulletphysics_checktype(x, y) if (!PyObject_TypeCheck(x, &bulletphysics_ ## y ## Type)) {\
+                PyErr_SetString(PyExc_TypeError, "expected a " #y "Type");\
+                return NULL;\
+        }\
+
 void pybulletphysics_add_DbvtBroadphase(PyObject *);
 void pybulletphysics_add_DefaultCollisionConfiguration(PyObject *);
 void pybulletphysics_add_CollisionDispatcher(PyObject *);
