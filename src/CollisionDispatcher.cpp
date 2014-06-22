@@ -1,8 +1,11 @@
 #include "pybulletphysics.h"
 
+extern PyTypeObject bulletphysics_DefaultCollisionConfigurationType;
+
 static void
-CollisionDispatcher_dealloc(bulletphysics_CollisionDispatcherObject* self)
+CollisionDispatcher_dealloc(bulletphysics_DispatcherObject* self)
 {
+	Py_DECREF(self->collision_configuration);
         delete(self->dispatcher);
         self->ob_type->tp_free((PyObject*)self);
 }
@@ -10,24 +13,29 @@ CollisionDispatcher_dealloc(bulletphysics_CollisionDispatcherObject* self)
 static PyObject*
 CollisionDispatcher_new(PyTypeObject *type, PyObject *args, PyObject *kwds)
 {
-	PyObject *py_collisionConfiguration = NULL;
+	bulletphysics_CollisionConfigurationObject *py_collisionConfiguration = NULL;
 	if (!PyArg_ParseTuple(args, "O", &py_collisionConfiguration)) {
         	return NULL;
     	}
 
-        bulletphysics_CollisionDispatcherObject *self = (bulletphysics_CollisionDispatcherObject *)type->tp_alloc(type, 0);
+	if (!PyObject_TypeCheck(py_collisionConfiguration, &bulletphysics_DefaultCollisionConfigurationType)) {
+                PyErr_SetString(PyExc_TypeError, "expected a DefaultCollisionConfigurationType");
+                return NULL;
+        }
+
+        bulletphysics_DispatcherObject *self = (bulletphysics_DispatcherObject *)type->tp_alloc(type, 0);
         if (self != NULL) {
-		bulletphysics_DefaultCollisionConfigurationObject *collisionConfiguration = (bulletphysics_DefaultCollisionConfigurationObject *) py_collisionConfiguration;
-                self->dispatcher = new btCollisionDispatcher(collisionConfiguration->configuration);
+                self->dispatcher = new btCollisionDispatcher(py_collisionConfiguration->configuration);
+		self->collision_configuration = py_collisionConfiguration; Py_INCREF(self->collision_configuration);
         }
         return (PyObject *)self;
 }
 
-static PyTypeObject bulletphysics_CollisionDispatcherType = {
+PyTypeObject bulletphysics_CollisionDispatcherType = {
     PyObject_HEAD_INIT(NULL)
     0,                         /*ob_size*/
     "bulletphysics.CollisionDispatcher", /*tp_name*/
-    sizeof(bulletphysics_CollisionDispatcherObject), /*tp_basicsize*/
+    sizeof(bulletphysics_DispatcherObject), /*tp_basicsize*/
     0,                         /*tp_itemsize*/
     (destructor)CollisionDispatcher_dealloc,    /*tp_dealloc*/
     0,                         /*tp_print*/

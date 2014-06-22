@@ -1,7 +1,7 @@
 #include "pybulletphysics.h"
 
 static void
-DefaultCollisionConfiguration_dealloc(bulletphysics_DefaultCollisionConfigurationObject* self)
+DefaultCollisionConfiguration_dealloc(bulletphysics_CollisionConfigurationObject* self)
 {
         delete(self->configuration);
         self->ob_type->tp_free((PyObject*)self);
@@ -10,18 +10,18 @@ DefaultCollisionConfiguration_dealloc(bulletphysics_DefaultCollisionConfiguratio
 static PyObject*
 DefaultCollisionConfiguration_new(PyTypeObject *type, PyObject *args, PyObject *kwds)
 {
-        bulletphysics_DefaultCollisionConfigurationObject *self = (bulletphysics_DefaultCollisionConfigurationObject *)type->tp_alloc(type, 0);
+        bulletphysics_CollisionConfigurationObject *self = (bulletphysics_CollisionConfigurationObject *)type->tp_alloc(type, 0);
         if (self != NULL) {
                 self->configuration = new btDefaultCollisionConfiguration();
         }
         return (PyObject *)self;
 }
 
-static PyTypeObject bulletphysics_DefaultCollisionConfigurationType = {
+PyTypeObject bulletphysics_DefaultCollisionConfigurationType = {
     PyObject_HEAD_INIT(NULL)
     0,                         /*ob_size*/
     "bulletphysics.DefaultCollisionConfiguration", /*tp_name*/
-    sizeof(bulletphysics_DefaultCollisionConfigurationObject), /*tp_basicsize*/
+    sizeof(bulletphysics_CollisionConfigurationObject), /*tp_basicsize*/
     0,                         /*tp_itemsize*/
     (destructor)DefaultCollisionConfiguration_dealloc,    /*tp_dealloc*/
     0,                         /*tp_print*/

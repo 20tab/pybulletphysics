@@ -23,7 +23,7 @@ DefaultMotionState_new(PyTypeObject *type, PyObject *args, PyObject *kwds)
         return (PyObject *)self;
 }
 
-static PyTypeObject bulletphysics_DefaultMotionStateType = {
+PyTypeObject bulletphysics_DefaultMotionStateType = {
     PyObject_HEAD_INIT(NULL)
     0,                         /*ob_size*/
     "bulletphysics.DefaultMotionState", /*tp_name*/

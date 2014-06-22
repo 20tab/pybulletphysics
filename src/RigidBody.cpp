@@ -23,7 +23,7 @@ RigidBody_new(PyTypeObject *type, PyObject *args, PyObject *kwds)
         return (PyObject *)self;
 }
 
-static PyTypeObject bulletphysics_RigidBodyType = {
+PyTypeObject bulletphysics_RigidBodyType = {
     PyObject_HEAD_INIT(NULL)
     0,                         /*ob_size*/
     "bulletphysics.RigidBody", /*tp_name*/

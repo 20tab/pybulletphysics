@@ -1,8 +1,19 @@
 #include "pybulletphysics.h"
 
+extern PyTypeObject bulletphysics_CollisionDispatcherType;
+extern PyTypeObject bulletphysics_DbvtBroadphaseType;
+extern PyTypeObject bulletphysics_SequentialImpulseConstraintSolverType;
+extern PyTypeObject bulletphysics_DefaultCollisionConfigurationType;
+extern PyTypeObject bulletphysics_Vector3Type;
+extern PyTypeObject bulletphysics_RigidBodyType;
+
 static void
-DiscreteDynamicsWorld_dealloc(bulletphysics_DiscreteDynamicsWorldObject* self)
+DiscreteDynamicsWorld_dealloc(bulletphysics_DynamicsWorldObject* self)
 {
+	Py_DECREF(self->broadphase);
+	Py_DECREF(self->dispatcher);
+	Py_DECREF(self->collision_configuration);
+	Py_DECREF(self->solver);
         delete(self->world);
         self->ob_type->tp_free((PyObject*)self);
 }
@@ -10,30 +21,55 @@ DiscreteDynamicsWorld_dealloc(bulletphysics_DiscreteDynamicsWorldObject* self)
 static PyObject*
 DiscreteDynamicsWorld_new(PyTypeObject *type, PyObject *args, PyObject *kwds)
 {
-	PyObject *py_dispatcher = NULL;
-	PyObject *py_broadphase = NULL;
-	PyObject *py_solver = NULL;
-	PyObject *py_collisionConfiguration = NULL;
+	bulletphysics_DispatcherObject *py_dispatcher = NULL;
+	bulletphysics_BroadphaseInterfaceObject *py_broadphase = NULL;
+	bulletphysics_ConstraintSolverObject *py_solver = NULL;
+	bulletphysics_CollisionConfigurationObject *py_collisionConfiguration = NULL;
 
 	if (!PyArg_ParseTuple(args, "OOOO", &py_dispatcher, &py_broadphase, &py_solver, &py_collisionConfiguration)) {
         	return NULL;
     	}
 
-        bulletphysics_DiscreteDynamicsWorldObject *self = (bulletphysics_DiscreteDynamicsWorldObject *)type->tp_alloc(type, 0);
+	if (!PyObject_TypeCheck(py_dispatcher, &bulletphysics_CollisionDispatcherType)) {
+		PyErr_SetString(PyExc_TypeError, "expected a CollisionDispatcherType");
+		return NULL;
+	}
+
+	if (!PyObject_TypeCheck(py_broadphase, &bulletphysics_DbvtBroadphaseType)) {
+		PyErr_SetString(PyExc_TypeError, "expected a DbvtBroadphaseType");
+		return NULL;
+	}
+
+	if (!PyObject_TypeCheck(py_solver, &bulletphysics_SequentialImpulseConstraintSolverType)) {
+		PyErr_SetString(PyExc_TypeError, "expected a SequentialImpulseConstraintSolverType");
+		return NULL;
+	}
+
+	if (!PyObject_TypeCheck(py_collisionConfiguration, &bulletphysics_DefaultCollisionConfigurationType)) {
+		PyErr_SetString(PyExc_TypeError, "expected a DefaultCollisionConfigurationType");
+		return NULL;
+	}
+
+        bulletphysics_DynamicsWorldObject *self = (bulletphysics_DynamicsWorldObject *)type->tp_alloc(type, 0);
         if (self != NULL) {
-		bulletphysics_CollisionDispatcherObject *dispatcher = (bulletphysics_CollisionDispatcherObject *) py_dispatcher;
-		bulletphysics_DbvtBroadphaseObject *broadphase = (bulletphysics_DbvtBroadphaseObject *) py_broadphase;
-		bulletphysics_SequentialImpulseConstraintSolverObject *solver = (bulletphysics_SequentialImpulseConstraintSolverObject *) py_solver;
-		bulletphysics_DefaultCollisionConfigurationObject *collisionConfiguration = (bulletphysics_DefaultCollisionConfigurationObject *) py_collisionConfiguration;
-                self->world = new btDiscreteDynamicsWorld(dispatcher->dispatcher, broadphase->broadphase, solver->solver, collisionConfiguration->configuration);
+                self->world = new btDiscreteDynamicsWorld(py_dispatcher->dispatcher, py_broadphase->broadphase, py_solver->solver, py_collisionConfiguration->configuration);
+		self->broadphase = py_broadphase; Py_INCREF(self->broadphase);
+		self->dispatcher = py_dispatcher; Py_INCREF(self->dispatcher);
+		self->collision_configuration = py_collisionConfiguration; Py_INCREF(self->collision_configuration);
+		self->solver = py_solver; Py_INCREF(self->solver);
         }
         return (PyObject *)self;
 }
 
 static PyObject *
-DiscreteDynamicsWorld_setGravity(bulletphysics_DiscreteDynamicsWorldObject *self, PyObject *args, PyObject *kwds) {
+DiscreteDynamicsWorld_setGravity(bulletphysics_DynamicsWorldObject *self, PyObject *args, PyObject *kwds) {
 	PyObject *py_vector3 = NULL;
 	if (!PyArg_ParseTuple(args, "O", &py_vector3)) {
+                return NULL;
+        }
+
+	if (!PyObject_TypeCheck(py_vector3, &bulletphysics_Vector3Type)) {
+                PyErr_SetString(PyExc_TypeError, "expected a Vector3Type");
                 return NULL;
         }
 
@@ -45,9 +81,14 @@ DiscreteDynamicsWorld_setGravity(bulletphysics_DiscreteDynamicsWorldObject *self
 }
 
 static PyObject *
-DiscreteDynamicsWorld_addRigidBody(bulletphysics_DiscreteDynamicsWorldObject *self, PyObject *args, PyObject *kwds) {
+DiscreteDynamicsWorld_addRigidBody(bulletphysics_DynamicsWorldObject *self, PyObject *args, PyObject *kwds) {
 	PyObject *py_rigidBody = NULL;
 	if (!PyArg_ParseTuple(args, "O", &py_rigidBody)) {
+                return NULL;
+        }
+
+	if (!PyObject_TypeCheck(py_rigidBody, &bulletphysics_RigidBodyType)) {
+                PyErr_SetString(PyExc_TypeError, "expected a RigidBodyType");
                 return NULL;
         }
 
@@ -59,7 +100,7 @@ DiscreteDynamicsWorld_addRigidBody(bulletphysics_DiscreteDynamicsWorldObject *se
 }
 
 static PyObject *
-DiscreteDynamicsWorld_stepSimulation(bulletphysics_DiscreteDynamicsWorldObject *self, PyObject *args, PyObject *kwds) {
+DiscreteDynamicsWorld_stepSimulation(bulletphysics_DynamicsWorldObject *self, PyObject *args, PyObject *kwds) {
 	float ts = 0.0;
 	float substeps = 1;
         if (!PyArg_ParseTuple(args, "f|f", &ts, &substeps)) {
@@ -72,9 +113,14 @@ DiscreteDynamicsWorld_stepSimulation(bulletphysics_DiscreteDynamicsWorldObject *
 }
 
 static PyObject *
-DiscreteDynamicsWorld_removeRigidBody(bulletphysics_DiscreteDynamicsWorldObject *self, PyObject *args, PyObject *kwds) {
+DiscreteDynamicsWorld_removeRigidBody(bulletphysics_DynamicsWorldObject *self, PyObject *args, PyObject *kwds) {
         PyObject *py_rigidBody = NULL;
         if (!PyArg_ParseTuple(args, "O", &py_rigidBody)) {
+                return NULL;
+        }
+
+	if (!PyObject_TypeCheck(py_rigidBody, &bulletphysics_RigidBodyType)) {
+                PyErr_SetString(PyExc_TypeError, "expected a RigidBodyType");
                 return NULL;
         }
 
@@ -98,7 +144,7 @@ static PyTypeObject bulletphysics_DiscreteDynamicsWorldType = {
     PyObject_HEAD_INIT(NULL)
     0,                         /*ob_size*/
     "bulletphysics.DiscreteDynamicsWorld", /*tp_name*/
-    sizeof(bulletphysics_DiscreteDynamicsWorldObject), /*tp_basicsize*/
+    sizeof(bulletphysics_DynamicsWorldObject), /*tp_basicsize*/
     0,                         /*tp_itemsize*/
     (destructor)DiscreteDynamicsWorld_dealloc,    /*tp_dealloc*/
     0,                         /*tp_print*/

@@ -1,7 +1,7 @@
 #include "pybulletphysics.h"
 
 static void
-DbvtBroadphase_dealloc(bulletphysics_DbvtBroadphaseObject* self)
+DbvtBroadphase_dealloc(bulletphysics_BroadphaseInterfaceObject* self)
 {
         delete(self->broadphase);
         self->ob_type->tp_free((PyObject*)self);
@@ -10,18 +10,18 @@ DbvtBroadphase_dealloc(bulletphysics_DbvtBroadphaseObject* self)
 static PyObject*
 DbvtBroadphase_new(PyTypeObject *type, PyObject *args, PyObject *kwds)
 {
-        bulletphysics_DbvtBroadphaseObject *self = (bulletphysics_DbvtBroadphaseObject *)type->tp_alloc(type, 0);
+        bulletphysics_BroadphaseInterfaceObject *self = (bulletphysics_BroadphaseInterfaceObject *)type->tp_alloc(type, 0);
         if (self != NULL) {
                 self->broadphase = new btDbvtBroadphase();
         }
         return (PyObject *)self;
 }
 
-static PyTypeObject bulletphysics_DbvtBroadphaseType = {
+PyTypeObject bulletphysics_DbvtBroadphaseType = {
     PyObject_HEAD_INIT(NULL)
     0,                         /*ob_size*/
     "bulletphysics.DbvtBroadphase", /*tp_name*/
-    sizeof(bulletphysics_DbvtBroadphaseObject), /*tp_basicsize*/
+    sizeof(bulletphysics_BroadphaseInterfaceObject), /*tp_basicsize*/
     0,                         /*tp_itemsize*/
     (destructor)DbvtBroadphase_dealloc,    /*tp_dealloc*/
     0,                         /*tp_print*/

@@ -7,7 +7,7 @@ static void
 Transform_dealloc(bulletphysics_TransformObject* self)
 {
 	// vector will be freed by the transform
-	((bulletphysics_Vector3Object *)self->origin)->vector = NULL;
+	self->origin->vector = NULL;
 	Py_DECREF(self->origin);
         delete(self->transform);
         self->ob_type->tp_free((PyObject*)self);
@@ -37,10 +37,10 @@ Transform_new(PyTypeObject *type, PyObject *args, PyObject *kwds)
 		PyObject *argList = Py_BuildValue("fff", 0.0, 0.0, 0.0);
 		PyObject *py_origin = PyObject_CallObject((PyObject *) &bulletphysics_Vector3Type, argList);
 		Py_DECREF(argList);
-		self->origin = py_origin;
+		self->origin = (bulletphysics_Vector3Object *) py_origin;
 		// delete the original vector
-		delete(((bulletphysics_Vector3Object *)self->origin)->vector);
-		((bulletphysics_Vector3Object *)self->origin)->vector = &self->transform->getOrigin();
+		delete(self->origin->vector);
+		self->origin->vector = &self->transform->getOrigin();
         }
         return (PyObject *)self;
 }
@@ -73,7 +73,7 @@ static PyTypeObject bulletphysics_TransformType = {
 static PyObject *
 Transform_getOrigin(bulletphysics_TransformObject *self, PyObject *args, PyObject *kwds) {
 	Py_INCREF(self->origin);
-        return self->origin;
+        return (PyObject *) self->origin;
 }
 
 static PyObject *

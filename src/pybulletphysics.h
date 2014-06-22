@@ -20,29 +20,34 @@ void pybulletphysics_add_BoxShape(PyObject *);
 typedef struct {
         PyObject_HEAD
         btBroadphaseInterface *broadphase;
-} bulletphysics_DbvtBroadphaseObject;
+} bulletphysics_BroadphaseInterfaceObject;
 
 
 typedef struct {
         PyObject_HEAD
-        btDefaultCollisionConfiguration *configuration;
-} bulletphysics_DefaultCollisionConfigurationObject;
+        btCollisionConfiguration *configuration;
+} bulletphysics_CollisionConfigurationObject;
 
 typedef struct {
         PyObject_HEAD
-        btCollisionDispatcher *dispatcher;
-} bulletphysics_CollisionDispatcherObject;
+        btDispatcher *dispatcher;
+	bulletphysics_CollisionConfigurationObject *collision_configuration;
+} bulletphysics_DispatcherObject;
 
 
 typedef struct {
         PyObject_HEAD
-        btSequentialImpulseConstraintSolver *solver;
-} bulletphysics_SequentialImpulseConstraintSolverObject;
+        btConstraintSolver *solver;
+} bulletphysics_ConstraintSolverObject;
 
 typedef struct {
         PyObject_HEAD
-        btDiscreteDynamicsWorld *world;
-} bulletphysics_DiscreteDynamicsWorldObject;
+        btDynamicsWorld *world;
+	bulletphysics_BroadphaseInterfaceObject *broadphase;	
+	bulletphysics_CollisionConfigurationObject *collision_configuration;
+	bulletphysics_DispatcherObject *dispatcher;
+	bulletphysics_ConstraintSolverObject *solver;
+} bulletphysics_DynamicsWorldObject;
 
 typedef struct {
         PyObject_HEAD
@@ -62,7 +67,7 @@ typedef struct {
 typedef struct {
         PyObject_HEAD
         btTransform *transform;
-	PyObject *origin;
+	bulletphysics_Vector3Object *origin;
 } bulletphysics_TransformObject;
 
 typedef struct {

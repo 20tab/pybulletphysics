@@ -1,7 +1,7 @@
 #include "pybulletphysics.h"
 
 static void
-SequentialImpulseConstraintSolver_dealloc(bulletphysics_SequentialImpulseConstraintSolverObject* self)
+SequentialImpulseConstraintSolver_dealloc(bulletphysics_ConstraintSolverObject* self)
 {
         delete(self->solver);
         self->ob_type->tp_free((PyObject*)self);
@@ -10,18 +10,18 @@ SequentialImpulseConstraintSolver_dealloc(bulletphysics_SequentialImpulseConstra
 static PyObject*
 SequentialImpulseConstraintSolver_new(PyTypeObject *type, PyObject *args, PyObject *kwds)
 {
-        bulletphysics_SequentialImpulseConstraintSolverObject *self = (bulletphysics_SequentialImpulseConstraintSolverObject *)type->tp_alloc(type, 0);
+        bulletphysics_ConstraintSolverObject *self = (bulletphysics_ConstraintSolverObject *)type->tp_alloc(type, 0);
         if (self != NULL) {
                 self->solver = new btSequentialImpulseConstraintSolver();
         }
         return (PyObject *)self;
 }
 
-static PyTypeObject bulletphysics_SequentialImpulseConstraintSolverType = {
+PyTypeObject bulletphysics_SequentialImpulseConstraintSolverType = {
     PyObject_HEAD_INIT(NULL)
     0,                         /*ob_size*/
     "bulletphysics.SequentialImpulseConstraintSolver", /*tp_name*/
-    sizeof(bulletphysics_SequentialImpulseConstraintSolverObject), /*tp_basicsize*/
+    sizeof(bulletphysics_ConstraintSolverObject), /*tp_basicsize*/
     0,                         /*tp_itemsize*/
     (destructor)SequentialImpulseConstraintSolver_dealloc,    /*tp_dealloc*/
     0,                         /*tp_print*/
