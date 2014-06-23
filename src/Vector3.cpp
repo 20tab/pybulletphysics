@@ -50,13 +50,24 @@ PyTypeObject bulletphysics_Vector3Type = {
     "Vector3 object",           /* tp_doc */
 };
 
-static PyObject *new_pyvector3_from_vector(btVector3 v) {
+PyObject *new_pyvector3_from_vector(btVector3 v) {
 	bulletphysics_Vector3Object *py_vector3 = (bulletphysics_Vector3Object *)bulletphysics_Vector3Type.tp_alloc(&bulletphysics_Vector3Type, 0);
 	if (py_vector3) {
 		py_vector3->vector = new btVector3(v.getX(), v.getY(), v.getZ());
 		Py_INCREF(py_vector3);
 	}
 	return (PyObject *)py_vector3;
+}
+
+static PyObject *
+Vector3_rotate(bulletphysics_Vector3Object *self, PyObject *args, PyObject *kwds) {
+	bulletphysics_Vector3Object *py_vector3 = NULL;
+	float angle = 0.0;
+	if (!PyArg_ParseTuple(args, "Of", &py_vector3, &angle)) {
+                return NULL;
+        }
+	pybulletphysics_checktype(py_vector3, Vector3);
+	return new_pyvector3_from_vector( self->vector->rotate(*(py_vector3->vector), angle) );
 }
 
 static PyObject *
@@ -90,6 +101,7 @@ static PyMethodDef Vector3_methods[] = {
     {"getX", (PyCFunction)Vector3_getX, METH_VARARGS, NULL },
     {"getY", (PyCFunction)Vector3_getY, METH_VARARGS, NULL },
     {"getZ", (PyCFunction)Vector3_getZ, METH_VARARGS, NULL },
+    {"rotate", (PyCFunction)Vector3_rotate, METH_VARARGS, NULL },
     {NULL, NULL, 0, NULL}
 };
 

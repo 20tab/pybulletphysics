@@ -93,6 +93,20 @@ RigidBody_applyCentralImpulse(bulletphysics_RigidBodyObject *self, PyObject *arg
 }
 
 static PyObject *
+RigidBody_applyTorque(bulletphysics_RigidBodyObject *self, PyObject *args, PyObject *kwds) {
+        PyObject *py_vector3 = NULL;
+        if (!PyArg_ParseTuple(args, "O", &py_vector3)) {
+                return NULL;
+        }       
+        
+        bulletphysics_Vector3Object *vector3 = (bulletphysics_Vector3Object *) py_vector3;
+        self->rigidBody->applyTorque(*(vector3->vector));
+        
+        Py_INCREF(Py_None);
+        return Py_None;
+}
+
+static PyObject *
 RigidBody_applyImpulse(bulletphysics_RigidBodyObject *self, PyObject *args, PyObject *kwds) {
         PyObject *py_vector3 = NULL;
         PyObject *py_vector3_pos = NULL;
@@ -136,6 +150,29 @@ RigidBody_setAngularVelocity(bulletphysics_RigidBodyObject *self, PyObject *args
         return Py_None;
 }
 
+static PyObject *
+RigidBody_activate(bulletphysics_RigidBodyObject *self, PyObject *args, PyObject *kwds) {
+        PyObject *py_bool = NULL;
+        if (!PyArg_ParseTuple(args, "O", &py_bool)) {
+                return NULL;
+        }
+
+	if (py_bool == Py_False || py_bool == Py_None) {
+		self->rigidBody->activate(false);
+	}
+	else {
+		self->rigidBody->activate(true);
+	}
+
+        Py_INCREF(Py_None);
+        return Py_None;
+}
+
+static PyObject *
+RigidBody_getOrientation(bulletphysics_RigidBodyObject *self, PyObject *args, PyObject *kwds) {
+        return new_pyquaternion_from_quaternion(self->rigidBody->getOrientation());
+}
+
 static PyMethodDef RigidBody_methods[] = {
     {"applyCentralForce", (PyCFunction)RigidBody_applyCentralForce, METH_VARARGS, NULL },
     {"applyForce", (PyCFunction)RigidBody_applyForce, METH_VARARGS, NULL },
@@ -143,6 +180,9 @@ static PyMethodDef RigidBody_methods[] = {
     {"applyImpulse", (PyCFunction)RigidBody_applyImpulse, METH_VARARGS, NULL },
     {"setLinearVelocity", (PyCFunction)RigidBody_setLinearVelocity, METH_VARARGS, NULL },
     {"setAngularVelocity", (PyCFunction)RigidBody_setAngularVelocity, METH_VARARGS, NULL },
+    {"activate", (PyCFunction)RigidBody_activate, METH_VARARGS, NULL },
+    {"applyTorque", (PyCFunction)RigidBody_applyTorque, METH_VARARGS, NULL },
+    {"getOrientation", (PyCFunction)RigidBody_getOrientation, METH_VARARGS, NULL },
     {NULL, NULL, 0, NULL}
 };
 

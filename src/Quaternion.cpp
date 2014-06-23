@@ -50,6 +50,15 @@ PyTypeObject bulletphysics_QuaternionType = {
     "Quaternion object",           /* tp_doc */
 };
 
+PyObject *new_pyquaternion_from_quaternion(btQuaternion q) {
+        bulletphysics_QuaternionObject *py_quaternion = (bulletphysics_QuaternionObject *)bulletphysics_QuaternionType.tp_alloc(&bulletphysics_QuaternionType, 0);
+        if (py_quaternion) {
+                py_quaternion->quaternion = new btQuaternion(q.getX(), q.getY(), q.getZ(), q.getW());
+                Py_INCREF(py_quaternion);
+        }
+        return (PyObject *)py_quaternion;
+}
+
 static PyObject *
 Quaternion_getX(bulletphysics_QuaternionObject *self, PyObject *args, PyObject *kwds) {
         return PyFloat_FromDouble(self->quaternion->getX());
@@ -70,11 +79,23 @@ Quaternion_getW(bulletphysics_QuaternionObject *self, PyObject *args, PyObject *
         return PyFloat_FromDouble(self->quaternion->getW());
 }
 
+static PyObject *
+Quaternion_getAxis(bulletphysics_QuaternionObject *self, PyObject *args, PyObject *kwds) {
+	return new_pyvector3_from_vector(self->quaternion->getAxis());
+}
+
+static PyObject *
+Quaternion_getAngle(bulletphysics_QuaternionObject *self, PyObject *args, PyObject *kwds) {
+	return PyFloat_FromDouble(self->quaternion->getAngle());
+}
+
 static PyMethodDef Quaternion_methods[] = {
     {"getX", (PyCFunction)Quaternion_getX, METH_VARARGS, NULL },
     {"getY", (PyCFunction)Quaternion_getY, METH_VARARGS, NULL },
     {"getZ", (PyCFunction)Quaternion_getZ, METH_VARARGS, NULL },
     {"getW", (PyCFunction)Quaternion_getW, METH_VARARGS, NULL },
+    {"getAxis", (PyCFunction)Quaternion_getAxis, METH_VARARGS, NULL },
+    {"getAngle", (PyCFunction)Quaternion_getAngle, METH_VARARGS, NULL },
     {NULL, NULL, 0, NULL}
 };
 

@@ -58,11 +58,13 @@ typedef struct {
         PyObject_HEAD
         btVector3 *vector;
 } bulletphysics_Vector3Object;
+PyObject *new_pyvector3_from_vector(btVector3);
 
 typedef struct {
         PyObject_HEAD
         btQuaternion *quaternion;
 } bulletphysics_QuaternionObject;
+PyObject *new_pyquaternion_from_quaternion(btQuaternion);
 
 typedef struct {
         PyObject_HEAD
