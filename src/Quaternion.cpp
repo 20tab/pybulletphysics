@@ -1,5 +1,7 @@
 #include "pybulletphysics.h"
 
+extern PyTypeObject bulletphysics_Vector3Type;
+
 static void
 Quaternion_dealloc(bulletphysics_QuaternionObject* self)
 {
@@ -89,6 +91,19 @@ Quaternion_getAngle(bulletphysics_QuaternionObject *self, PyObject *args, PyObje
 	return PyFloat_FromDouble(self->quaternion->getAngle());
 }
 
+static PyObject *
+Quaternion_setRotation(bulletphysics_QuaternionObject *self, PyObject *args, PyObject *kwds) {
+        bulletphysics_Vector3Object *py_vector3 = NULL;
+        float angle = 0.0;
+        if (!PyArg_ParseTuple(args, "Of", &py_vector3, &angle)) {
+                return NULL;
+        }
+        pybulletphysics_checktype(py_vector3, Vector3);
+	self->quaternion->setRotation(*(py_vector3->vector), angle);
+	Py_INCREF(Py_None);
+	return Py_None;
+}
+
 static PyMethodDef Quaternion_methods[] = {
     {"getX", (PyCFunction)Quaternion_getX, METH_VARARGS, NULL },
     {"getY", (PyCFunction)Quaternion_getY, METH_VARARGS, NULL },
@@ -96,6 +111,7 @@ static PyMethodDef Quaternion_methods[] = {
     {"getW", (PyCFunction)Quaternion_getW, METH_VARARGS, NULL },
     {"getAxis", (PyCFunction)Quaternion_getAxis, METH_VARARGS, NULL },
     {"getAngle", (PyCFunction)Quaternion_getAngle, METH_VARARGS, NULL },
+    {"setRotation", (PyCFunction)Quaternion_setRotation, METH_VARARGS, NULL },
     {NULL, NULL, 0, NULL}
 };
 
