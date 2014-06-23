@@ -107,6 +107,20 @@ RigidBody_applyTorque(bulletphysics_RigidBodyObject *self, PyObject *args, PyObj
 }
 
 static PyObject *
+RigidBody_applyTorqueImpulse(bulletphysics_RigidBodyObject *self, PyObject *args, PyObject *kwds) {
+        PyObject *py_vector3 = NULL;
+        if (!PyArg_ParseTuple(args, "O", &py_vector3)) {
+                return NULL;
+        }
+
+        bulletphysics_Vector3Object *vector3 = (bulletphysics_Vector3Object *) py_vector3;
+        self->rigidBody->applyTorqueImpulse(*(vector3->vector));
+
+        Py_INCREF(Py_None);
+        return Py_None;
+}
+
+static PyObject *
 RigidBody_applyImpulse(bulletphysics_RigidBodyObject *self, PyObject *args, PyObject *kwds) {
         PyObject *py_vector3 = NULL;
         PyObject *py_vector3_pos = NULL;
@@ -183,6 +197,7 @@ static PyMethodDef RigidBody_methods[] = {
     {"activate", (PyCFunction)RigidBody_activate, METH_VARARGS, NULL },
     {"applyTorque", (PyCFunction)RigidBody_applyTorque, METH_VARARGS, NULL },
     {"getOrientation", (PyCFunction)RigidBody_getOrientation, METH_VARARGS, NULL },
+    {"applyTorqueImpulse", (PyCFunction)RigidBody_applyTorqueImpulse, METH_VARARGS, NULL },
     {NULL, NULL, 0, NULL}
 };
 

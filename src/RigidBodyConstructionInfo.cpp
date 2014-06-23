@@ -54,8 +54,31 @@ static PyTypeObject bulletphysics_RigidBodyConstructionInfoType = {
     "RigidBodyConstructionInfo object",           /* tp_doc */
 };
 
+static PyObject*
+RigidBodyConstructionInfo_m_friction_get(bulletphysics_RigidBodyConstructionInfoObject* self, void *closure) {
+	return PyFloat_FromDouble(self->constructionInfo->m_friction);
+}
+
+static int
+RigidBodyConstructionInfo_m_friction_set(bulletphysics_RigidBodyConstructionInfoObject* self, PyObject *value, void *closure) {
+	if (!PyFloat_Check(value)) {
+		PyErr_SetString(PyExc_TypeError,
+                    "float expected");
+			return -1;
+	}	
+	self->constructionInfo->m_friction = PyFloat_AsDouble(value);
+	return 0;
+}
+
+static PyGetSetDef RigidBodyConstructionInfo_getseters[] = {
+	{"m_friction", (getter)RigidBodyConstructionInfo_m_friction_get, (setter)RigidBodyConstructionInfo_m_friction_set, NULL, NULL},
+	{NULL, NULL, NULL, NULL, NULL}
+};
+
+
 void pybulletphysics_add_RigidBodyConstructionInfo(PyObject *module) {
 	bulletphysics_RigidBodyConstructionInfoType.tp_new = RigidBodyConstructionInfo_new;
+	bulletphysics_RigidBodyConstructionInfoType.tp_getset = RigidBodyConstructionInfo_getseters;
 
         if (PyType_Ready(&bulletphysics_RigidBodyConstructionInfoType) < 0)
                 return;	
