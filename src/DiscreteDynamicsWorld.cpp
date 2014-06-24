@@ -15,6 +15,8 @@ DiscreteDynamicsWorld_dealloc(bulletphysics_DynamicsWorldObject* self)
 	Py_DECREF(self->collision_configuration);
 	Py_DECREF(self->solver);
         delete(self->world);
+	Py_XDECREF(self->callback);
+	Py_XDECREF(self->userinfo);
         self->ob_type->tp_free((PyObject*)self);
 }
 
@@ -136,12 +138,63 @@ DiscreteDynamicsWorld_getDispatcher(bulletphysics_DynamicsWorldObject *self, PyO
         return (PyObject *) self->dispatcher;
 }
 
+static void py_bulletphysics_InternalTickCallback(btDynamicsWorld *world, btScalar timeStep) {
+	bulletphysics_DynamicsWorldObject *self = (bulletphysics_DynamicsWorldObject *) world->getWorldUserInfo();
+	if (!self) return;
+	if (!self->callback) return;
+	PyObject *argList = Py_BuildValue("Of", self, timeStep);
+        PyObject *ret = PyObject_CallObject(self->callback, argList);
+        Py_DECREF(argList);
+	Py_XDECREF(ret);
+}
+
+static PyObject *
+DiscreteDynamicsWorld_setInternalTickCallback(bulletphysics_DynamicsWorldObject *self, PyObject *args, PyObject *kwds) {
+        PyObject *py_callback = NULL;
+        PyObject *py_userinfo = NULL;
+        PyObject *py_pretick = NULL;
+        if (!PyArg_ParseTuple(args, "O|OO", &py_callback, &py_userinfo, &py_pretick)) {
+                return NULL;
+        }
+
+	if (!PyCallable_Check(py_callback)) {
+		PyErr_SetString(PyExc_TypeError, "expected a callable object");
+                return NULL;
+	}
+
+	// destroy the old callback
+	Py_XDECREF(self->callback);
+        self->callback = py_callback;
+	Py_INCREF(self->callback);
+
+	// destroy the old userinfo
+	Py_XDECREF(self->userinfo);
+        self->userinfo = py_userinfo;
+	Py_XINCREF(self->userinfo);
+
+	self->world->setInternalTickCallback(py_bulletphysics_InternalTickCallback, self, py_pretick == Py_True ? true : false);
+
+        Py_INCREF(Py_None);
+        return Py_None;
+}
+
+static PyObject *
+DiscreteDynamicsWorld_getWorldUserInfo(bulletphysics_DynamicsWorldObject *self, PyObject *args, PyObject *kwds) {
+	if (self->userinfo) {
+		return self->userinfo;
+	}
+	Py_INCREF(Py_None);
+	return Py_None;
+}
+
 static PyMethodDef DiscreteDynamicsWorld_methods[] = {
     {"setGravity", (PyCFunction)DiscreteDynamicsWorld_setGravity, METH_VARARGS, NULL },
     {"addRigidBody", (PyCFunction)DiscreteDynamicsWorld_addRigidBody, METH_VARARGS, NULL },
     {"removeRigidBody", (PyCFunction)DiscreteDynamicsWorld_removeRigidBody, METH_VARARGS, NULL },
     {"stepSimulation", (PyCFunction)DiscreteDynamicsWorld_stepSimulation, METH_VARARGS, NULL },
     {"getDispatcher", (PyCFunction)DiscreteDynamicsWorld_getDispatcher, METH_VARARGS, NULL },
+    {"setInternalTickCallback", (PyCFunction)DiscreteDynamicsWorld_setInternalTickCallback, METH_VARARGS, NULL },
+    {"getWorldUserInfo", (PyCFunction)DiscreteDynamicsWorld_getWorldUserInfo, METH_VARARGS, NULL },
     {NULL, NULL, 0, NULL}
 };
 

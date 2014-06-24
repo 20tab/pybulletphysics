@@ -52,6 +52,8 @@ typedef struct {
 	bulletphysics_CollisionConfigurationObject *collision_configuration;
 	bulletphysics_DispatcherObject *dispatcher;
 	bulletphysics_ConstraintSolverObject *solver;
+	PyObject *callback;
+	PyObject *userinfo;
 } bulletphysics_DynamicsWorldObject;
 
 typedef struct {
