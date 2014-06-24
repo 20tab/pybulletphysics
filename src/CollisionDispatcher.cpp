@@ -56,7 +56,18 @@ PyTypeObject bulletphysics_CollisionDispatcherType = {
     "CollisionDispatcher object",           /* tp_doc */
 };
 
+static PyObject *
+CollisionDispatcher_getNumManifolds(bulletphysics_DispatcherObject *self, PyObject *args, PyObject *kwds) {
+	return PyInt_FromLong(self->dispatcher->getNumManifolds());
+}
+
+static PyMethodDef CollisionDispatcher_methods[] = {
+    {"getNumManifolds", (PyCFunction)CollisionDispatcher_getNumManifolds, METH_VARARGS, NULL },
+    {NULL, NULL, 0, NULL}
+};
+
 void pybulletphysics_add_CollisionDispatcher(PyObject *module) {
+	bulletphysics_CollisionDispatcherType.tp_methods = CollisionDispatcher_methods;
 	bulletphysics_CollisionDispatcherType.tp_new = CollisionDispatcher_new;
 
         if (PyType_Ready(&bulletphysics_CollisionDispatcherType) < 0)

@@ -131,11 +131,17 @@ DiscreteDynamicsWorld_removeRigidBody(bulletphysics_DynamicsWorldObject *self, P
         return Py_None;
 }
 
+static PyObject *
+DiscreteDynamicsWorld_getDispatcher(bulletphysics_DynamicsWorldObject *self, PyObject *args, PyObject *kwds) {
+        return (PyObject *) self->dispatcher;
+}
+
 static PyMethodDef DiscreteDynamicsWorld_methods[] = {
     {"setGravity", (PyCFunction)DiscreteDynamicsWorld_setGravity, METH_VARARGS, NULL },
     {"addRigidBody", (PyCFunction)DiscreteDynamicsWorld_addRigidBody, METH_VARARGS, NULL },
     {"removeRigidBody", (PyCFunction)DiscreteDynamicsWorld_removeRigidBody, METH_VARARGS, NULL },
     {"stepSimulation", (PyCFunction)DiscreteDynamicsWorld_stepSimulation, METH_VARARGS, NULL },
+    {"getDispatcher", (PyCFunction)DiscreteDynamicsWorld_getDispatcher, METH_VARARGS, NULL },
     {NULL, NULL, 0, NULL}
 };
 
