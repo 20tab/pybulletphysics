@@ -135,6 +135,7 @@ DiscreteDynamicsWorld_removeRigidBody(bulletphysics_DynamicsWorldObject *self, P
 
 static PyObject *
 DiscreteDynamicsWorld_getDispatcher(bulletphysics_DynamicsWorldObject *self, PyObject *args, PyObject *kwds) {
+	Py_INCREF((PyObject *) self->dispatcher);
         return (PyObject *) self->dispatcher;
 }
 
@@ -181,6 +182,7 @@ DiscreteDynamicsWorld_setInternalTickCallback(bulletphysics_DynamicsWorldObject 
 static PyObject *
 DiscreteDynamicsWorld_getWorldUserInfo(bulletphysics_DynamicsWorldObject *self, PyObject *args, PyObject *kwds) {
 	if (self->userinfo) {
+		Py_INCREF(self->userinfo);
 		return self->userinfo;
 	}
 	Py_INCREF(Py_None);

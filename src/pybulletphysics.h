@@ -21,6 +21,7 @@ void pybulletphysics_add_DefaultMotionState(PyObject *);
 void pybulletphysics_add_RigidBodyConstructionInfo(PyObject *);
 void pybulletphysics_add_RigidBody(PyObject *);
 void pybulletphysics_add_BoxShape(PyObject *);
+void pybulletphysics_add_PersistentManifold(PyObject *);
 
 typedef struct {
         PyObject_HEAD
@@ -32,6 +33,13 @@ typedef struct {
         PyObject_HEAD
         btCollisionConfiguration *configuration;
 } bulletphysics_CollisionConfigurationObject;
+
+typedef struct {
+        PyObject_HEAD
+        btPersistentManifold *manifold;
+	int do_not_delete;
+} bulletphysics_PersistentManifoldObject;
+PyObject *new_pypersistentmanifold_from_persistentmanifold(btPersistentManifold *);
 
 typedef struct {
         PyObject_HEAD
@@ -93,4 +101,3 @@ typedef struct {
         PyObject_HEAD
         btRigidBody *rigidBody;
 } bulletphysics_RigidBodyObject;
-
