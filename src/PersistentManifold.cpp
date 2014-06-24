@@ -58,18 +58,34 @@ PyObject *new_pypersistentmanifold_from_persistentmanifold(btPersistentManifold 
 }
 
 static PyObject *
-PersistentManifold_getX(bulletphysics_PersistentManifoldObject *self, PyObject *args, PyObject *kwds) {
-        return PyFloat_FromDouble(0);
+PersistentManifold_getBody0(bulletphysics_PersistentManifoldObject *self, PyObject *args, PyObject *kwds) {
+	btRigidBody *body = (btRigidBody *) self->manifold->getBody0();
+	bulletphysics_RigidBodyObject *py_body = (bulletphysics_RigidBodyObject *) body->getUserPointer();
+	if (py_body) {
+		Py_INCREF((PyObject *) py_body);
+		return (PyObject *) py_body;
+	}
+	Py_INCREF(Py_None);
+	return Py_None;
 }
 
 static PyObject *
-PersistentManifold_getY(bulletphysics_PersistentManifoldObject *self, PyObject *args, PyObject *kwds) {
-        return PyFloat_FromDouble(0);
+PersistentManifold_getBody1(bulletphysics_PersistentManifoldObject *self, PyObject *args, PyObject *kwds) {
+	btRigidBody *body = (btRigidBody *) self->manifold->getBody1();
+	bulletphysics_RigidBodyObject *py_body = (bulletphysics_RigidBodyObject *) body->getUserPointer();
+	if (py_body) {
+		Py_INCREF((PyObject *) py_body);
+		return (PyObject *) py_body;
+	}
+	Py_INCREF(Py_None);
+	return Py_None;
 }
 
+
+
 static PyMethodDef PersistentManifold_methods[] = {
-    {"getBody0", (PyCFunction)PersistentManifold_getX, METH_VARARGS, NULL },
-    {"getBody1", (PyCFunction)PersistentManifold_getY, METH_VARARGS, NULL },
+    {"getBody0", (PyCFunction)PersistentManifold_getBody0, METH_VARARGS, NULL },
+    {"getBody1", (PyCFunction)PersistentManifold_getBody1, METH_VARARGS, NULL },
     {NULL, NULL, 0, NULL}
 };
 

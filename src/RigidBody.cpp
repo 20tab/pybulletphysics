@@ -19,6 +19,7 @@ RigidBody_new(PyTypeObject *type, PyObject *args, PyObject *kwds)
         if (self != NULL) {
 		bulletphysics_RigidBodyConstructionInfoObject *rigidbodyCI = (bulletphysics_RigidBodyConstructionInfoObject *) py_rigidbodyCI;
                 self->rigidBody = new btRigidBody(*(rigidbodyCI->constructionInfo));
+		self->rigidBody->setUserPointer(self);
         }
         return (PyObject *)self;
 }

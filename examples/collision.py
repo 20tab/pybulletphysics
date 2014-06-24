@@ -60,7 +60,9 @@ def cb(world, ts):
     nm = world.getDispatcher().getNumManifolds()
     print "cb", nm
     for i in range(0, nm):
-        print "manifold", i, world.getDispatcher().getManifoldByIndexInternal(i)
+        manifold = world.getDispatcher().getManifoldByIndexInternal(i)
+        print manifold.getBody0()
+        print manifold.getBody1()
     print("hello", ts, world.getWorldUserInfo())
 
 world.setInternalTickCallback(cb, 17)
