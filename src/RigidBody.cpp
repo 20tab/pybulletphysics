@@ -1,8 +1,10 @@
 #include "pybulletphysics.h"
+#include <stddef.h>
 
 static void
 RigidBody_dealloc(bulletphysics_RigidBodyObject* self)
 {
+	Py_XDECREF(self->dict);
         delete(self->rigidBody);
         self->ob_type->tp_free((PyObject*)self);
 }
@@ -20,6 +22,7 @@ RigidBody_new(PyTypeObject *type, PyObject *args, PyObject *kwds)
 		bulletphysics_RigidBodyConstructionInfoObject *rigidbodyCI = (bulletphysics_RigidBodyConstructionInfoObject *) py_rigidbodyCI;
                 self->rigidBody = new btRigidBody(*(rigidbodyCI->constructionInfo));
 		self->rigidBody->setUserPointer(self);
+		self->dict = NULL;
         }
         return (PyObject *)self;
 }
@@ -42,8 +45,8 @@ PyTypeObject bulletphysics_RigidBodyType = {
     0,                         /*tp_hash */
     0,                         /*tp_call*/
     0,                         /*tp_str*/
-    0,                         /*tp_getattro*/
-    0,                         /*tp_setattro*/
+    PyObject_GenericGetAttr,   /*tp_getattro*/
+    PyObject_GenericSetAttr,   /*tp_setattro*/
     0,                         /*tp_as_buffer*/
     Py_TPFLAGS_DEFAULT|Py_TPFLAGS_BASETYPE, /*tp_flags*/
     "RigidBody object",           /* tp_doc */
@@ -204,6 +207,7 @@ static PyMethodDef RigidBody_methods[] = {
 
 void pybulletphysics_add_RigidBody(PyObject *module) {
 	bulletphysics_RigidBodyType.tp_methods = RigidBody_methods;
+	bulletphysics_RigidBodyType.tp_dictoffset = offsetof(bulletphysics_RigidBodyObject, dict);
 	bulletphysics_RigidBodyType.tp_new = RigidBody_new;
 
         if (PyType_Ready(&bulletphysics_RigidBodyType) < 0)

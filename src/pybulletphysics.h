@@ -100,4 +100,5 @@ typedef struct {
 typedef struct {
         PyObject_HEAD
         btRigidBody *rigidBody;
+	PyObject* dict;
 } bulletphysics_RigidBodyObject;

@@ -64,6 +64,9 @@ CollisionDispatcher_getNumManifolds(bulletphysics_DispatcherObject *self, PyObje
 static PyObject *
 CollisionDispatcher_getManifoldByIndexInternal(bulletphysics_DispatcherObject *self, PyObject *args, PyObject *kwds) {
 	int i = 0;
+	if (!PyArg_ParseTuple(args, "i", &i)) {
+                return NULL;
+        }	
 	btPersistentManifold *manifold = self->dispatcher->getManifoldByIndexInternal(i);
 	return new_pypersistentmanifold_from_persistentmanifold(manifold);
 }

@@ -10,11 +10,12 @@ extern PyTypeObject bulletphysics_RigidBodyType;
 static void
 DiscreteDynamicsWorld_dealloc(bulletphysics_DynamicsWorldObject* self)
 {
+	// must be destroyed first
+        delete(self->world);
 	Py_DECREF(self->broadphase);
 	Py_DECREF(self->dispatcher);
 	Py_DECREF(self->collision_configuration);
 	Py_DECREF(self->solver);
-        delete(self->world);
 	Py_XDECREF(self->callback);
 	Py_XDECREF(self->userinfo);
         self->ob_type->tp_free((PyObject*)self);
@@ -94,6 +95,7 @@ DiscreteDynamicsWorld_addRigidBody(bulletphysics_DynamicsWorldObject *self, PyOb
                 return NULL;
         }
 
+	Py_INCREF(py_rigidBody);
 	bulletphysics_RigidBodyObject *rigidBody = (bulletphysics_RigidBodyObject *) py_rigidBody;
 	self->world->addRigidBody(rigidBody->rigidBody);
 
@@ -125,6 +127,8 @@ DiscreteDynamicsWorld_removeRigidBody(bulletphysics_DynamicsWorldObject *self, P
                 PyErr_SetString(PyExc_TypeError, "expected a RigidBodyType");
                 return NULL;
         }
+
+	Py_DECREF(py_rigidBody);
 
         bulletphysics_RigidBodyObject *rigidBody = (bulletphysics_RigidBodyObject *) py_rigidBody;
         self->world->removeRigidBody(rigidBody->rigidBody);
