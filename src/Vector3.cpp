@@ -97,11 +97,17 @@ Vector3_getZ(bulletphysics_Vector3Object *self, PyObject *args, PyObject *kwds) 
         return PyFloat_FromDouble(self->vector->getZ());
 }
 
+static PyObject *
+Vector3_length(bulletphysics_Vector3Object *self, PyObject *args, PyObject *kwds) {
+        return PyFloat_FromDouble(self->vector->length());
+}
+
 static PyMethodDef Vector3_methods[] = {
     {"getX", (PyCFunction)Vector3_getX, METH_VARARGS, NULL },
     {"getY", (PyCFunction)Vector3_getY, METH_VARARGS, NULL },
     {"getZ", (PyCFunction)Vector3_getZ, METH_VARARGS, NULL },
     {"rotate", (PyCFunction)Vector3_rotate, METH_VARARGS, NULL },
+    {"length", (PyCFunction)Vector3_length, METH_VARARGS, NULL },
     {NULL, NULL, 0, NULL}
 };
 

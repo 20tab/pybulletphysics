@@ -26,6 +26,9 @@ class Vector3Test(unittest.TestCase):
         self.assertEqual(0.2, round(v.getY(), 2))
         self.assertEqual(0.6, round(v.getZ(), 2))
 
+    def test_length(self):
+        self.assertEqual(3.74, round(self.vector.length(), 2))
+
 def test_suite():
     return unittest.TestLoader().loadTestsFromName(__name__)
 
