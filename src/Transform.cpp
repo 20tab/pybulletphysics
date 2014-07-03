@@ -45,7 +45,7 @@ Transform_new(PyTypeObject *type, PyObject *args, PyObject *kwds)
         return (PyObject *)self;
 }
 
-static PyTypeObject bulletphysics_TransformType = {
+PyTypeObject bulletphysics_TransformType = {
     PyObject_HEAD_INIT(NULL)
     0,                         /*ob_size*/
     "bulletphysics.Transform", /*tp_name*/
@@ -86,6 +86,25 @@ Transform_getRotation(bulletphysics_TransformObject *self, PyObject *args, PyObj
 }
 
 static PyObject *
+Transform_setIdentity(bulletphysics_TransformObject *self, PyObject *args, PyObject *kwds) {
+	self->transform->setIdentity();
+	Py_INCREF(Py_None);
+	return Py_None;
+}
+
+static PyObject *
+Transform_setRotation(bulletphysics_TransformObject *self, PyObject *args, PyObject *kwds) {
+	bulletphysics_QuaternionObject *py_quaternion = NULL;
+	if (!PyArg_ParseTuple(args, "O", &py_quaternion)) {
+                return NULL;
+        }
+	pybulletphysics_checktype(py_quaternion, Quaternion);	
+	self->transform->setRotation(*(py_quaternion->quaternion));
+	Py_INCREF(Py_None);
+	return Py_None;
+}
+
+static PyObject *
 Transform_getOpenGLMatrix(bulletphysics_TransformObject *self, PyObject *args, PyObject *kwds) {
 	PyObject *py_list = NULL;
 	if (!PyArg_ParseTuple(args, "O", &py_list)) {
@@ -112,6 +131,8 @@ static PyMethodDef Transform_methods[] = {
     {"getOrigin", (PyCFunction)Transform_getOrigin, METH_VARARGS, NULL },
     {"getRotation", (PyCFunction)Transform_getRotation, METH_VARARGS, NULL },
     {"getOpenGLMatrix", (PyCFunction)Transform_getOpenGLMatrix, METH_VARARGS, NULL },
+    {"setIdentity", (PyCFunction)Transform_setIdentity, METH_VARARGS, NULL },
+    {"setRotation", (PyCFunction)Transform_setRotation, METH_VARARGS, NULL },
     {NULL, NULL, 0, NULL}
 };
 

@@ -104,6 +104,20 @@ Quaternion_setRotation(bulletphysics_QuaternionObject *self, PyObject *args, PyO
 	return Py_None;
 }
 
+static PyObject *
+Quaternion_setEuler(bulletphysics_QuaternionObject *self, PyObject *args, PyObject *kwds) {
+	float x = 0.0;
+	float y = 0.0;
+	float z = 0.0;
+        if (!PyArg_ParseTuple(args, "fff", &x, &y, &z)) {
+                return NULL;
+        }
+        self->quaternion->setEuler(x, y, z);
+        Py_INCREF(Py_None);
+        return Py_None;
+}
+
+
 static PyMethodDef Quaternion_methods[] = {
     {"getX", (PyCFunction)Quaternion_getX, METH_VARARGS, NULL },
     {"getY", (PyCFunction)Quaternion_getY, METH_VARARGS, NULL },
@@ -112,6 +126,7 @@ static PyMethodDef Quaternion_methods[] = {
     {"getAxis", (PyCFunction)Quaternion_getAxis, METH_VARARGS, NULL },
     {"getAngle", (PyCFunction)Quaternion_getAngle, METH_VARARGS, NULL },
     {"setRotation", (PyCFunction)Quaternion_setRotation, METH_VARARGS, NULL },
+    {"setEuler", (PyCFunction)Quaternion_setEuler, METH_VARARGS, NULL },
     {NULL, NULL, 0, NULL}
 };
 

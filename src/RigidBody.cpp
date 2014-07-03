@@ -1,6 +1,8 @@
 #include "pybulletphysics.h"
 #include <stddef.h>
 
+extern PyTypeObject bulletphysics_TransformType;
+
 static void
 RigidBody_dealloc(bulletphysics_RigidBodyObject* self)
 {
@@ -187,6 +189,19 @@ RigidBody_activate(bulletphysics_RigidBodyObject *self, PyObject *args, PyObject
 }
 
 static PyObject *
+RigidBody_setCenterOfMassTransform(bulletphysics_RigidBodyObject *self, PyObject *args, PyObject *kwds) {
+	bulletphysics_TransformObject *py_transform = NULL;
+        if (!PyArg_ParseTuple(args, "O", &py_transform)) {
+                return NULL;
+        }
+	pybulletphysics_checktype(py_transform, Transform);
+	self->rigidBody->setCenterOfMassTransform(*(py_transform->transform));
+        Py_INCREF(Py_None);
+        return Py_None;
+}
+
+
+static PyObject *
 RigidBody_getOrientation(bulletphysics_RigidBodyObject *self, PyObject *args, PyObject *kwds) {
         return new_pyquaternion_from_quaternion(self->rigidBody->getOrientation());
 }
@@ -202,6 +217,7 @@ static PyMethodDef RigidBody_methods[] = {
     {"applyTorque", (PyCFunction)RigidBody_applyTorque, METH_VARARGS, NULL },
     {"getOrientation", (PyCFunction)RigidBody_getOrientation, METH_VARARGS, NULL },
     {"applyTorqueImpulse", (PyCFunction)RigidBody_applyTorqueImpulse, METH_VARARGS, NULL },
+    {"setCenterOfMassTransform", (PyCFunction)RigidBody_setCenterOfMassTransform, METH_VARARGS, NULL },
     {NULL, NULL, 0, NULL}
 };
 
