@@ -48,7 +48,7 @@ PyTypeObject bulletphysics_QuaternionType = {
     0,                         /*tp_getattro*/
     0,                         /*tp_setattro*/
     0,                         /*tp_as_buffer*/
-    Py_TPFLAGS_DEFAULT|Py_TPFLAGS_BASETYPE, /*tp_flags*/
+    Py_TPFLAGS_DEFAULT|Py_TPFLAGS_BASETYPE|Py_TPFLAGS_CHECKTYPES, /*tp_flags*/
     "Quaternion object",           /* tp_doc */
 };
 
@@ -115,7 +115,20 @@ static PyMethodDef Quaternion_methods[] = {
     {NULL, NULL, 0, NULL}
 };
 
+static PyObject *
+Quaternion_add(bulletphysics_QuaternionObject *self, PyObject *py_quaternion) {
+        pybulletphysics_checktype(py_quaternion, Quaternion);
+        return new_pyquaternion_from_quaternion( *self->quaternion + *(((bulletphysics_QuaternionObject *)py_quaternion)->quaternion));
+}
+
+PyNumberMethods Quaternion_number_methods;
+
 void pybulletphysics_add_Quaternion(PyObject *module) {
+	memset(&Quaternion_number_methods, 0, sizeof(PyNumberMethods));
+        bulletphysics_QuaternionType.tp_as_number = &Quaternion_number_methods;
+
+        Quaternion_number_methods.nb_add = (binaryfunc)Quaternion_add;
+
 	bulletphysics_QuaternionType.tp_methods = Quaternion_methods;
 	bulletphysics_QuaternionType.tp_new = Quaternion_new;
 
