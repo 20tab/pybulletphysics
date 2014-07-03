@@ -206,6 +206,11 @@ RigidBody_getOrientation(bulletphysics_RigidBodyObject *self, PyObject *args, Py
         return new_pyquaternion_from_quaternion(self->rigidBody->getOrientation());
 }
 
+static PyObject *
+RigidBody_getLinearVelocity(bulletphysics_RigidBodyObject *self, PyObject *args, PyObject *kwds) {
+        return new_pyvector3_from_vector(self->rigidBody->getLinearVelocity());
+}
+
 static PyMethodDef RigidBody_methods[] = {
     {"applyCentralForce", (PyCFunction)RigidBody_applyCentralForce, METH_VARARGS, NULL },
     {"applyForce", (PyCFunction)RigidBody_applyForce, METH_VARARGS, NULL },
@@ -218,6 +223,7 @@ static PyMethodDef RigidBody_methods[] = {
     {"getOrientation", (PyCFunction)RigidBody_getOrientation, METH_VARARGS, NULL },
     {"applyTorqueImpulse", (PyCFunction)RigidBody_applyTorqueImpulse, METH_VARARGS, NULL },
     {"setCenterOfMassTransform", (PyCFunction)RigidBody_setCenterOfMassTransform, METH_VARARGS, NULL },
+    {"getLinearVelocity", (PyCFunction)RigidBody_getLinearVelocity, METH_VARARGS, NULL },
     {NULL, NULL, 0, NULL}
 };
 
