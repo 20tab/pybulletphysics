@@ -136,6 +136,12 @@ Quaternion_add(bulletphysics_QuaternionObject *self, PyObject *py_quaternion) {
         return new_pyquaternion_from_quaternion( *self->quaternion + *(((bulletphysics_QuaternionObject *)py_quaternion)->quaternion));
 }
 
+static PyObject *
+Quaternion_mul(bulletphysics_QuaternionObject *self, PyObject *py_quaternion) {
+        pybulletphysics_checktype(py_quaternion, Quaternion);
+        return new_pyquaternion_from_quaternion( *self->quaternion * *(((bulletphysics_QuaternionObject *)py_quaternion)->quaternion));
+}
+
 PyNumberMethods Quaternion_number_methods;
 
 void pybulletphysics_add_Quaternion(PyObject *module) {
@@ -143,6 +149,7 @@ void pybulletphysics_add_Quaternion(PyObject *module) {
         bulletphysics_QuaternionType.tp_as_number = &Quaternion_number_methods;
 
         Quaternion_number_methods.nb_add = (binaryfunc)Quaternion_add;
+        Quaternion_number_methods.nb_multiply = (binaryfunc)Quaternion_mul;
 
 	bulletphysics_QuaternionType.tp_methods = Quaternion_methods;
 	bulletphysics_QuaternionType.tp_new = Quaternion_new;
