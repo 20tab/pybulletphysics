@@ -129,5 +129,4 @@ typedef struct {
 	bulletphysics_VehicleTuningObject *tuning;
 	bulletphysics_RigidBodyObject *chassis;
 	bulletphysics_VehicleRaycasterObject *raycaster;
-        PyObject *wheels;
 } bulletphysics_RaycastVehicleObject;

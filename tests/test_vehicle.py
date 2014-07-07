@@ -20,7 +20,10 @@ class VehicleTest(unittest.TestCase):
 
     def test_wheel(self):
         vehicle = RaycastVehicle(self.tuning, self.chassis, self.raycaster)
-        print vehicle
+        vehicle.addWheel(Vector3(0, 0, 0), Vector3(0, 0, 0), Vector3(0, 0, 0), 1.0, 4.0, self.tuning, True)
+        vehicle.addWheel(Vector3(0, 0, 0), Vector3(0, 0, 0), Vector3(0, 0, 0), 1.0, 4.0, self.tuning, True)
+        vehicle.addWheel(Vector3(0, 0, 0), Vector3(0, 0, 0), Vector3(0, 0, 0), 1.0, 4.0, self.tuning, False)
+        vehicle.addWheel(Vector3(0, 0, 0), Vector3(0, 0, 0), Vector3(0, 0, 0), 1.0, 4.0, self.tuning, False)
 
 def test_suite():
     return unittest.TestLoader().loadTestsFromName(__name__)

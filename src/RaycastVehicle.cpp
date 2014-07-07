@@ -3,12 +3,14 @@
 extern PyTypeObject bulletphysics_VehicleTuningType;
 extern PyTypeObject bulletphysics_DefaultVehicleRaycasterType;
 extern PyTypeObject bulletphysics_RigidBodyType;
+extern PyTypeObject bulletphysics_Vector3Type;
 
 static void
 RaycastVehicle_dealloc(bulletphysics_RaycastVehicleObject* self)
 {
 	Py_DECREF(self->tuning);
-	Py_DECREF(self->wheels);
+	Py_DECREF(self->chassis);
+	Py_DECREF(self->raycaster);
         delete(self->vehicle);
         self->ob_type->tp_free((PyObject*)self);
 }
@@ -45,7 +47,6 @@ RaycastVehicle_new(PyTypeObject *type, PyObject *args, PyObject *kwds)
 		self->tuning = py_tuning; Py_INCREF(self->tuning);
 		self->chassis = py_chassis; Py_INCREF(self->chassis);
 		self->raycaster = py_raycaster; Py_INCREF(self->raycaster);
-		self->wheels = PyList_New(0); Py_INCREF(self->wheels);
         }
         return (PyObject *)self;
 }
@@ -87,11 +88,52 @@ RaycastVehicle_setSteeringValue(bulletphysics_RaycastVehicleObject *self, PyObje
 	return Py_None;
 }
 
+static PyObject *
+RaycastVehicle_addWheel(bulletphysics_RaycastVehicleObject *self, PyObject *args, PyObject *kwds) {
+	bulletphysics_Vector3Object *cpoint = NULL;
+	bulletphysics_Vector3Object *direction = NULL;
+	bulletphysics_Vector3Object *axle = NULL;
+	float suspension = 0.0;
+	float radius = 0.0;
+	bulletphysics_VehicleTuningObject *tuning = NULL;
+	PyObject *is_front_wheel = NULL;
+
+	if (!PyArg_ParseTuple(args, "OOOffOO", &cpoint, &direction, &axle, &suspension, &radius, &tuning, &is_front_wheel)) {
+                return NULL;
+        }
+
+        if (!PyObject_TypeCheck(cpoint, &bulletphysics_Vector3Type)) {
+                PyErr_SetString(PyExc_TypeError, "expected a Vector3Type");
+                return NULL;
+        }
+
+	if (!PyObject_TypeCheck(direction, &bulletphysics_Vector3Type)) {
+                PyErr_SetString(PyExc_TypeError, "expected a Vector3Type");
+                return NULL;
+        }
+	
+	if (!PyObject_TypeCheck(axle, &bulletphysics_Vector3Type)) {
+                PyErr_SetString(PyExc_TypeError, "expected a Vector3Type");
+                return NULL;
+        }
+
+	if (!PyObject_TypeCheck(tuning, &bulletphysics_VehicleTuningType)) {
+                PyErr_SetString(PyExc_TypeError, "expected a VehicleTuningType");
+                return NULL;
+        }
+
+	self->vehicle->addWheel(*(cpoint->vector), *(direction->vector), *(axle->vector), suspension, radius, *(tuning->tuning), PyObject_IsTrue(is_front_wheel));
+
+	Py_INCREF(Py_None);
+        return Py_None;
+	
+}
+
 static PyMethodDef RaycastVehicle_methods[] = {
     {"setSteeringValue", (PyCFunction)RaycastVehicle_setSteeringValue, METH_VARARGS, NULL },
     {"applyEngineForce", (PyCFunction)RaycastVehicle_applyEngineForce, METH_VARARGS, NULL },
     {"setBrake", (PyCFunction)RaycastVehicle_setBrake, METH_VARARGS, NULL },
-    //{"addWheel", (PyCFunction)RaycastVehicle_addWheel, METH_VARARGS, NULL },
+    {"addWheel", (PyCFunction)RaycastVehicle_addWheel, METH_VARARGS, NULL },
     {NULL, NULL, 0, NULL}
 };
 
