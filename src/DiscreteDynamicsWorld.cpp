@@ -205,7 +205,7 @@ static PyMethodDef DiscreteDynamicsWorld_methods[] = {
 };
 
 
-static PyTypeObject bulletphysics_DiscreteDynamicsWorldType = {
+PyTypeObject bulletphysics_DiscreteDynamicsWorldType = {
     PyObject_HEAD_INIT(NULL)
     0,                         /*ob_size*/
     "bulletphysics.DiscreteDynamicsWorld", /*tp_name*/

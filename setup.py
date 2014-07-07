@@ -28,6 +28,8 @@ mod = Extension('bulletphysics',
                          'src/PersistentManifold.cpp',
                          'src/VehicleTuning.cpp',
                          'src/WheelInfo.cpp',
+                         'src/DefaultVehicleRaycaster.cpp',
+                         'src/RaycastVehicle.cpp',
                 ],
                 extra_compile_args=pkgconfig('--cflags', 'bullet'),
                 extra_link_args=pkgconfig('--libs', 'bullet'))

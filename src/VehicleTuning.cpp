@@ -17,7 +17,7 @@ VehicleTuning_new(PyTypeObject *type, PyObject *args, PyObject *kwds)
         return (PyObject *)self;
 }
 
-static PyTypeObject bulletphysics_VehicleTuningType = {
+PyTypeObject bulletphysics_VehicleTuningType = {
     PyObject_HEAD_INIT(NULL)
     0,                         /*ob_size*/
     "bulletphysics.VehicleTuning", /*tp_name*/

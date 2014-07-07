@@ -26,4 +26,6 @@ initbulletphysics(void)
 	pybulletphysics_add_PersistentManifold(m);
 	pybulletphysics_add_VehicleTuning(m);
 	pybulletphysics_add_WheelInfo(m);
+	pybulletphysics_add_DefaultVehicleRaycaster(m);
+	pybulletphysics_add_RaycastVehicle(m);
 }
