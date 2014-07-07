@@ -24,4 +24,6 @@ initbulletphysics(void)
 	pybulletphysics_add_RigidBody(m);
 	pybulletphysics_add_BoxShape(m);
 	pybulletphysics_add_PersistentManifold(m);
+	pybulletphysics_add_VehicleTuning(m);
+	pybulletphysics_add_WheelInfo(m);
 }

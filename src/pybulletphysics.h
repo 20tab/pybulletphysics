@@ -22,6 +22,8 @@ void pybulletphysics_add_RigidBodyConstructionInfo(PyObject *);
 void pybulletphysics_add_RigidBody(PyObject *);
 void pybulletphysics_add_BoxShape(PyObject *);
 void pybulletphysics_add_PersistentManifold(PyObject *);
+void pybulletphysics_add_VehicleTuning(PyObject *);
+void pybulletphysics_add_WheelInfo(PyObject *);
 
 typedef struct {
         PyObject_HEAD
@@ -102,3 +104,13 @@ typedef struct {
         btRigidBody *rigidBody;
 	PyObject* dict;
 } bulletphysics_RigidBodyObject;
+
+typedef struct {
+        PyObject_HEAD
+        btRaycastVehicle::btVehicleTuning *tuning;
+} bulletphysics_VehicleTuningObject;
+
+typedef struct {
+        PyObject_HEAD
+        btWheelInfo *wheel;
+} bulletphysics_WheelInfoObject;
