@@ -21,7 +21,7 @@ world.addRigidBody(ground_rigidbody)
 ground_rigidbody.name = "ground"
 
 chassis_motionstate = DefaultMotionState( Transform(Quaternion(0,0,0,1), Vector3(0, 60,0)) )
-chassis_mass = 1000
+chassis_mass = 100
 local_inertia = Vector3(0,0,0)
 chassis.calculateLocalInertia(chassis_mass, local_inertia)
 
@@ -45,13 +45,13 @@ world.addAction(vehicle)
 vehicle.setCoordinateSystem(0, 1, 2)
 
 # back left (0)
-vehicle.addWheel(Vector3(-10, -4.5, -19), Vector3(0,-1, 0), Vector3(-1, 0, 0), 0.6, 1.5, tuning, False)
+vehicle.addWheel(Vector3(-10, -4.5, -19), Vector3(0,-1, 0), Vector3(-1, 0, 0), 0.6, 6, tuning, False)
 # back right (1)
-vehicle.addWheel(Vector3(10, -4.5, -19), Vector3(0, -1, 0), Vector3(-1, 0, 0), 0.6, 1.5, tuning, False)
+vehicle.addWheel(Vector3(10, -4.5, -19), Vector3(0, -1, 0), Vector3(-1, 0, 0), 0.6, 6, tuning, False)
 # front left (2)
-vehicle.addWheel(Vector3(-10, -4.5, 19), Vector3(0, -1, 0), Vector3(-1, 0, 0), 0.6, 1.5, tuning, True)
+vehicle.addWheel(Vector3(-10, -4.5, 19), Vector3(0, -1, 0), Vector3(-1, 0, 0), 0.6, 6, tuning, True)
 # front right (3)
-vehicle.addWheel(Vector3(10, -4.5, 19), Vector3(0, -1, 0), Vector3(-1, 0, 0), 0.6, 1.5, tuning, True)
+vehicle.addWheel(Vector3(10, -4.5, 19), Vector3(0, -1, 0), Vector3(-1, 0, 0), 0.6, 6, tuning, True)
 
 
 chassis_trans = Transform()
