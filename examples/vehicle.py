@@ -39,16 +39,20 @@ print vehicle
 world.addRigidBody(chassis_rigidbody)
 chassis_rigidbody.setActivationState(4)
 
-# back left (0)
-vehicle.addWheel(Vector3(-4, -3, -8), Vector3(0,0,1), Vector3(-1, 0, 0), 0.6, 1.0, tuning, False)
-# back right (1)
-vehicle.addWheel(Vector3(4, -3, -8), Vector3(0,0,1), Vector3(-1, 0, 0), 0.6, 1.0, tuning, False)
-# front left (2)
-vehicle.addWheel(Vector3(-4, -3, 8), Vector3(0,0,1), Vector3(-1, 0, 0), 0.6, 1.0, tuning, True)
-# front right (3)
-vehicle.addWheel(Vector3(4, -3, 8), Vector3(0,0,1), Vector3(-1, 0, 0), 0.6, 1.0, tuning, True)
 
 world.addAction(vehicle)
+
+vehicle.setCoordinateSystem(0, 1, 2)
+
+# back left (0)
+vehicle.addWheel(Vector3(-4, -3, -8), Vector3(0,-1, 0), Vector3(-1, 0, 0), 0.6, 1.0, tuning, False)
+# back right (1)
+vehicle.addWheel(Vector3(4, -3, -8), Vector3(0, -1, 0), Vector3(-1, 0, 0), 0.6, 1.0, tuning, False)
+# front left (2)
+vehicle.addWheel(Vector3(-4, -3, 8), Vector3(0, -1, 0), Vector3(-1, 0, 0), 0.6, 1.0, tuning, True)
+# front right (3)
+vehicle.addWheel(Vector3(4, -3, 8), Vector3(0, -1, 0), Vector3(-1, 0, 0), 0.6, 1.0, tuning, True)
+
 
 vehicle.applyEngineForce(1000, 0)
 vehicle.applyEngineForce(1000, 1)
@@ -58,10 +62,12 @@ vehicle.applyEngineForce(1000, 3)
 chassis_trans = Transform()
 
 for i in range(0, 3000):
-    vehicle.applyEngineForce(1000, 0)
-    vehicle.applyEngineForce(1000, 1)
-    vehicle.applyEngineForce(1000, 2)
-    vehicle.applyEngineForce(1000, 3)
+    vehicle.applyEngineForce(10000, 0)
+    vehicle.applyEngineForce(10000, 1)
+    vehicle.applyEngineForce(10000, 2)
+    vehicle.applyEngineForce(10000, 3)
+    vehicle.setBrake(0, 2)
+    vehicle.setBrake(0, 3)
     world.stepSimulation(1/30.0, 10)
     chassis_motionstate.getWorldTransform(chassis_trans)
     origin = chassis_trans.getOrigin()

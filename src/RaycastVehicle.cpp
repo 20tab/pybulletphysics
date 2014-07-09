@@ -77,6 +77,20 @@ RaycastVehicle_applyEngineForce(bulletphysics_RaycastVehicleObject *self, PyObje
 }
 
 static PyObject *
+RaycastVehicle_setCoordinateSystem(bulletphysics_RaycastVehicleObject *self, PyObject *args, PyObject *kwds) {
+        int right = 0;
+        int up = 0;
+        int forward = 0;
+        if (!PyArg_ParseTuple(args, "iii", &right, &up, &forward)) {
+                return NULL;
+        }
+        self->vehicle->setCoordinateSystem(right, up, forward);
+        Py_INCREF(Py_None);
+        return Py_None;
+}
+
+
+static PyObject *
 RaycastVehicle_setSteeringValue(bulletphysics_RaycastVehicleObject *self, PyObject *args, PyObject *kwds) {
         float steering = 0.0;
 	int wheel = 0;
@@ -134,6 +148,7 @@ static PyMethodDef RaycastVehicle_methods[] = {
     {"applyEngineForce", (PyCFunction)RaycastVehicle_applyEngineForce, METH_VARARGS, NULL },
     {"setBrake", (PyCFunction)RaycastVehicle_setBrake, METH_VARARGS, NULL },
     {"addWheel", (PyCFunction)RaycastVehicle_addWheel, METH_VARARGS, NULL },
+    {"setCoordinateSystem", (PyCFunction)RaycastVehicle_setCoordinateSystem, METH_VARARGS, NULL },
     {NULL, NULL, 0, NULL}
 };
 
