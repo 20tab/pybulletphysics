@@ -6,6 +6,7 @@ extern PyTypeObject bulletphysics_SequentialImpulseConstraintSolverType;
 extern PyTypeObject bulletphysics_DefaultCollisionConfigurationType;
 extern PyTypeObject bulletphysics_Vector3Type;
 extern PyTypeObject bulletphysics_RigidBodyType;
+extern PyTypeObject bulletphysics_RaycastVehicleType;
 
 static void
 DiscreteDynamicsWorld_dealloc(bulletphysics_DynamicsWorldObject* self)
@@ -104,6 +105,25 @@ DiscreteDynamicsWorld_addRigidBody(bulletphysics_DynamicsWorldObject *self, PyOb
 }
 
 static PyObject *
+DiscreteDynamicsWorld_addAction(bulletphysics_DynamicsWorldObject *self, PyObject *args, PyObject *kwds) {
+        bulletphysics_RaycastVehicleObject *py_vehicle = NULL;
+        if (!PyArg_ParseTuple(args, "O", &py_vehicle)) {
+                return NULL;
+        }
+
+        if (!PyObject_TypeCheck(py_vehicle, &bulletphysics_RaycastVehicleType)) {
+                PyErr_SetString(PyExc_TypeError, "expected a RaycastVehicleType");
+                return NULL;
+        }
+
+        Py_INCREF(py_vehicle);
+        self->world->addAction(py_vehicle->vehicle);
+
+        Py_INCREF(Py_None);
+        return Py_None;
+}
+
+static PyObject *
 DiscreteDynamicsWorld_stepSimulation(bulletphysics_DynamicsWorldObject *self, PyObject *args, PyObject *kwds) {
 	float ts = 0.0;
 	float substeps = 1;
@@ -196,6 +216,7 @@ DiscreteDynamicsWorld_getWorldUserInfo(bulletphysics_DynamicsWorldObject *self, 
 static PyMethodDef DiscreteDynamicsWorld_methods[] = {
     {"setGravity", (PyCFunction)DiscreteDynamicsWorld_setGravity, METH_VARARGS, NULL },
     {"addRigidBody", (PyCFunction)DiscreteDynamicsWorld_addRigidBody, METH_VARARGS, NULL },
+    {"addAction", (PyCFunction)DiscreteDynamicsWorld_addAction, METH_VARARGS, NULL },
     {"removeRigidBody", (PyCFunction)DiscreteDynamicsWorld_removeRigidBody, METH_VARARGS, NULL },
     {"stepSimulation", (PyCFunction)DiscreteDynamicsWorld_stepSimulation, METH_VARARGS, NULL },
     {"getDispatcher", (PyCFunction)DiscreteDynamicsWorld_getDispatcher, METH_VARARGS, NULL },

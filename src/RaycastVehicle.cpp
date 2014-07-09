@@ -138,7 +138,7 @@ static PyMethodDef RaycastVehicle_methods[] = {
 };
 
 
-static PyTypeObject bulletphysics_RaycastVehicleType = {
+PyTypeObject bulletphysics_RaycastVehicleType = {
     PyObject_HEAD_INIT(NULL)
     0,                         /*ob_size*/
     "bulletphysics.RaycastVehicle", /*tp_name*/
