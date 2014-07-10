@@ -6,6 +6,7 @@ import test_transform
 import test_quaternion
 import test_rigidbody
 import test_vehicle
+import test_shape
 
 def test_suite():
     suite = unittest.TestSuite()
@@ -15,6 +16,7 @@ def test_suite():
     suite.addTest(test_quaternion.test_suite())
     suite.addTest(test_rigidbody.test_suite())
     suite.addTest(test_vehicle.test_suite())
+    suite.addTest(test_shape.test_suite())
     return suite
 
 if __name__ == '__main__':

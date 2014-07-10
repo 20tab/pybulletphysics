@@ -105,6 +105,18 @@ Transform_setRotation(bulletphysics_TransformObject *self, PyObject *args, PyObj
 }
 
 static PyObject *
+Transform_setOrigin(bulletphysics_TransformObject *self, PyObject *args, PyObject *kwds) {
+	bulletphysics_Vector3Object *py_vector = NULL;
+	if (!PyArg_ParseTuple(args, "O", &py_vector)) {
+                return NULL;
+        }
+	pybulletphysics_checktype(py_vector, Vector3);	
+	self->transform->setOrigin(*(py_vector->vector));
+	Py_INCREF(Py_None);
+	return Py_None;
+}
+
+static PyObject *
 Transform_getOpenGLMatrix(bulletphysics_TransformObject *self, PyObject *args, PyObject *kwds) {
 	PyObject *py_list = NULL;
 	if (!PyArg_ParseTuple(args, "O", &py_list)) {
@@ -129,6 +141,7 @@ Transform_getOpenGLMatrix(bulletphysics_TransformObject *self, PyObject *args, P
 
 static PyMethodDef Transform_methods[] = {
     {"getOrigin", (PyCFunction)Transform_getOrigin, METH_VARARGS, NULL },
+    {"setOrigin", (PyCFunction)Transform_setOrigin, METH_VARARGS, NULL },
     {"getRotation", (PyCFunction)Transform_getRotation, METH_VARARGS, NULL },
     {"getOpenGLMatrix", (PyCFunction)Transform_getOpenGLMatrix, METH_VARARGS, NULL },
     {"setIdentity", (PyCFunction)Transform_setIdentity, METH_VARARGS, NULL },

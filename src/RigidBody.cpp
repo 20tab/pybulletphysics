@@ -211,6 +211,12 @@ RigidBody_setActivationState(bulletphysics_RigidBodyObject *self, PyObject *args
         return Py_None;
 }
 
+static PyObject *
+RigidBody_getActivationState(bulletphysics_RigidBodyObject *self, PyObject *args, PyObject *kwds) {
+	PyInt_FromLong(self->rigidBody->getActivationState());
+}
+
+
 
 
 static PyObject *
@@ -237,6 +243,7 @@ static PyMethodDef RigidBody_methods[] = {
     {"setCenterOfMassTransform", (PyCFunction)RigidBody_setCenterOfMassTransform, METH_VARARGS, NULL },
     {"getLinearVelocity", (PyCFunction)RigidBody_getLinearVelocity, METH_VARARGS, NULL },
     {"setActivationState", (PyCFunction)RigidBody_setActivationState, METH_VARARGS, NULL },
+    {"getActivationState", (PyCFunction)RigidBody_getActivationState, METH_VARARGS, NULL },
     {NULL, NULL, 0, NULL}
 };
 

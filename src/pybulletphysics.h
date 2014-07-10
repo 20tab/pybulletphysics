@@ -26,6 +26,7 @@ void pybulletphysics_add_VehicleTuning(PyObject *);
 void pybulletphysics_add_WheelInfo(PyObject *);
 void pybulletphysics_add_DefaultVehicleRaycaster(PyObject *);
 void pybulletphysics_add_RaycastVehicle(PyObject *);
+void pybulletphysics_add_CompoundShape(PyObject *);
 
 typedef struct {
         PyObject_HEAD
