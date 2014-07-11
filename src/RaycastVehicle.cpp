@@ -103,6 +103,11 @@ RaycastVehicle_setSteeringValue(bulletphysics_RaycastVehicleObject *self, PyObje
 }
 
 static PyObject *
+RaycastVehicle_getCurrentSpeedKmHour(bulletphysics_RaycastVehicleObject *self, PyObject *args, PyObject *kwds) {
+        return PyFloat_FromDouble(self->vehicle->getCurrentSpeedKmHour());
+}
+
+static PyObject *
 RaycastVehicle_addWheel(bulletphysics_RaycastVehicleObject *self, PyObject *args, PyObject *kwds) {
 	bulletphysics_Vector3Object *cpoint = NULL;
 	bulletphysics_Vector3Object *direction = NULL;
@@ -149,6 +154,7 @@ static PyMethodDef RaycastVehicle_methods[] = {
     {"setBrake", (PyCFunction)RaycastVehicle_setBrake, METH_VARARGS, NULL },
     {"addWheel", (PyCFunction)RaycastVehicle_addWheel, METH_VARARGS, NULL },
     {"setCoordinateSystem", (PyCFunction)RaycastVehicle_setCoordinateSystem, METH_VARARGS, NULL },
+    {"getCurrentSpeedKmHour", (PyCFunction)RaycastVehicle_getCurrentSpeedKmHour, METH_VARARGS, NULL },
     {NULL, NULL, 0, NULL}
 };
 
