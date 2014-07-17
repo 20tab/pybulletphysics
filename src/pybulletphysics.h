@@ -94,8 +94,9 @@ typedef struct {
 
 typedef struct {
         PyObject_HEAD
-        btDefaultMotionState *motionState;
+        btMotionState *motionState;
 } bulletphysics_DefaultMotionStateObject;
+PyObject *new_motionstate_from_motionstate(btMotionState*);
 
 typedef struct {
         PyObject_HEAD

@@ -3,7 +3,8 @@
 static void
 DefaultMotionState_dealloc(bulletphysics_DefaultMotionStateObject* self)
 {
-        delete(self->motionState);
+	// do not fre it !!!
+        //delete(self->motionState);
         self->ob_type->tp_free((PyObject*)self);
 }
 
@@ -48,6 +49,15 @@ PyTypeObject bulletphysics_DefaultMotionStateType = {
     "DefaultMotionState object",           /* tp_doc */
 };
 
+PyObject *new_motionstate_from_motionstate(btMotionState* motionState) {
+        bulletphysics_DefaultMotionStateObject *py_motionstate = (bulletphysics_DefaultMotionStateObject *)bulletphysics_DefaultMotionStateType.tp_alloc(&bulletphysics_DefaultMotionStateType, 0);
+        if (py_motionstate) {
+		py_motionstate->motionState = motionState;
+                Py_INCREF(py_motionstate);
+        }
+        return (PyObject *)py_motionstate;
+}
+
 static PyObject *
 DefaultMotionState_getWorldTransform(bulletphysics_DefaultMotionStateObject *self, PyObject *args, PyObject *kwds) {
         PyObject *py_transform = NULL;
@@ -62,9 +72,24 @@ DefaultMotionState_getWorldTransform(bulletphysics_DefaultMotionStateObject *sel
         return Py_None;
 }
 
+static PyObject *
+DefaultMotionState_setWorldTransform(bulletphysics_DefaultMotionStateObject *self, PyObject *args, PyObject *kwds) {
+        PyObject *py_transform = NULL;
+        if (!PyArg_ParseTuple(args, "O", &py_transform)) {
+                return NULL;
+        }
+
+        bulletphysics_TransformObject *transform = (bulletphysics_TransformObject *) py_transform;
+        self->motionState->setWorldTransform(*(transform->transform));
+
+        Py_INCREF(Py_None);
+        return Py_None;
+}
+
 
 static PyMethodDef DefaultMotionState_methods[] = {
     {"getWorldTransform", (PyCFunction)DefaultMotionState_getWorldTransform, METH_VARARGS, NULL },
+    {"setWorldTransform", (PyCFunction)DefaultMotionState_setWorldTransform, METH_VARARGS, NULL },
     {NULL, NULL, 0, NULL}
 };
 

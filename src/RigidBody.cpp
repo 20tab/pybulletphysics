@@ -242,6 +242,11 @@ RigidBody_setCollisionFlags(bulletphysics_RigidBodyObject *self, PyObject *args,
     return Py_None;
 }
 
+static PyObject *
+RigidBody_getMotionState(bulletphysics_RigidBodyObject *self, PyObject *args, PyObject *kwds) {
+    return new_motionstate_from_motionstate(self->rigidBody->getMotionState());
+}
+
 static PyMethodDef RigidBody_methods[] = {
     {"applyCentralForce", (PyCFunction)RigidBody_applyCentralForce, METH_VARARGS, NULL },
     {"applyForce", (PyCFunction)RigidBody_applyForce, METH_VARARGS, NULL },
@@ -259,6 +264,7 @@ static PyMethodDef RigidBody_methods[] = {
     {"getActivationState", (PyCFunction)RigidBody_getActivationState, METH_VARARGS, NULL },
     {"getCollisionFlags", (PyCFunction)RigidBody_getCollisionFlags, METH_VARARGS, NULL },
     {"setCollisionFlags", (PyCFunction)RigidBody_setCollisionFlags, METH_VARARGS, NULL },
+    {"getMotionState", (PyCFunction)RigidBody_getMotionState, METH_VARARGS, NULL },
     {NULL, NULL, 0, NULL}
 };
 
