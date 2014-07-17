@@ -189,6 +189,11 @@ RigidBody_activate(bulletphysics_RigidBodyObject *self, PyObject *args, PyObject
 }
 
 static PyObject *
+RigidBody_getCenterOfMassTransform(bulletphysics_RigidBodyObject *self, PyObject *args, PyObject *kwds) {
+    return new_pytransform_from_transform(self->rigidBody->getCenterOfMassTransform());
+}
+
+static PyObject *
 RigidBody_setCenterOfMassTransform(bulletphysics_RigidBodyObject *self, PyObject *args, PyObject *kwds) {
 	bulletphysics_TransformObject *py_transform = NULL;
     if (!PyArg_ParseTuple(args, "O", &py_transform)) {
@@ -258,6 +263,7 @@ static PyMethodDef RigidBody_methods[] = {
     {"applyTorque", (PyCFunction)RigidBody_applyTorque, METH_VARARGS, NULL },
     {"getOrientation", (PyCFunction)RigidBody_getOrientation, METH_VARARGS, NULL },
     {"applyTorqueImpulse", (PyCFunction)RigidBody_applyTorqueImpulse, METH_VARARGS, NULL },
+    {"getCenterOfMassTransform", (PyCFunction)RigidBody_getCenterOfMassTransform, METH_VARARGS, NULL },
     {"setCenterOfMassTransform", (PyCFunction)RigidBody_setCenterOfMassTransform, METH_VARARGS, NULL },
     {"getLinearVelocity", (PyCFunction)RigidBody_getLinearVelocity, METH_VARARGS, NULL },
     {"setActivationState", (PyCFunction)RigidBody_setActivationState, METH_VARARGS, NULL },

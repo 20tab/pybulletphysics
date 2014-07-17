@@ -70,6 +70,15 @@ PyTypeObject bulletphysics_TransformType = {
     "Transform object",           /* tp_doc */
 };
 
+PyObject *new_pytransform_from_transform(const btTransform t) {
+    bulletphysics_TransformObject *py_transform = (bulletphysics_TransformObject *)bulletphysics_TransformType.tp_alloc(&bulletphysics_TransformType, 0);
+    if(py_transform){
+        py_transform->transform = new btTransform(t);
+        Py_INCREF(py_transform);
+    }
+    return (PyObject *)py_transform;
+}
+
 static PyObject *
 Transform_getOrigin(bulletphysics_TransformObject *self, PyObject *args, PyObject *kwds) {
 	Py_INCREF(self->origin);

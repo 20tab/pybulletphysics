@@ -91,6 +91,7 @@ typedef struct {
         btTransform *transform;
 	bulletphysics_Vector3Object *origin;
 } bulletphysics_TransformObject;
+PyObject *new_pytransform_from_transform(const btTransform);
 
 typedef struct {
         PyObject_HEAD
