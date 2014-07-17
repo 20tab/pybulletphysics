@@ -31,6 +31,7 @@ mod = Extension('bulletphysics',
                          'src/DefaultVehicleRaycaster.cpp',
                          'src/RaycastVehicle.cpp',
                          'src/CompoundShape.cpp',
+                         'src/CylinderShape.cpp',
                 ],
                 extra_compile_args=pkgconfig('--cflags', 'bullet'),
                 extra_link_args=pkgconfig('--libs', 'bullet'))
