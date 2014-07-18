@@ -143,6 +143,18 @@ RigidBody_applyImpulse(bulletphysics_RigidBodyObject *self, PyObject *args, PyOb
 }
 
 static PyObject *
+RigidBody_setWorldTransform(bulletphysics_RigidBodyObject *self, PyObject *args, PyObject *kwds) {
+    bulletphysics_TransformObject *py_transform = NULL;
+    if (!PyArg_ParseTuple(args, "O", &py_transform)) {
+        return NULL;
+    }
+    pybulletphysics_checktype(py_transform, Transform);
+    self->rigidBody->setWorldTransform(*(py_transform->transform));
+    Py_INCREF(Py_None);
+    return Py_None;
+}
+
+static PyObject *
 RigidBody_setLinearVelocity(bulletphysics_RigidBodyObject *self, PyObject *args, PyObject *kwds) {
     PyObject *py_vector3 = NULL;
     if (!PyArg_ParseTuple(args, "O", &py_vector3)) {
@@ -271,6 +283,8 @@ static PyMethodDef RigidBody_methods[] = {
     {"getCollisionFlags", (PyCFunction)RigidBody_getCollisionFlags, METH_VARARGS, NULL },
     {"setCollisionFlags", (PyCFunction)RigidBody_setCollisionFlags, METH_VARARGS, NULL },
     {"getMotionState", (PyCFunction)RigidBody_getMotionState, METH_VARARGS, NULL },
+    {"setWorldTransform", (PyCFunction)RigidBody_setWorldTransform, METH_VARARGS, NULL },
+
     {NULL, NULL, 0, NULL}
 };
 
