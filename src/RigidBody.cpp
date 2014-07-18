@@ -288,6 +288,7 @@ static PyMethodDef RigidBody_methods[] = {
     {"getCollisionFlags", (PyCFunction)RigidBody_getCollisionFlags, METH_VARARGS, NULL },
     {"setCollisionFlags", (PyCFunction)RigidBody_setCollisionFlags, METH_VARARGS, NULL },
     {"getMotionState", (PyCFunction)RigidBody_getMotionState, METH_VARARGS, NULL },
+    {"getWorldTransform", (PyCFunction)RigidBody_setWorldTransform, METH_VARARGS, NULL },
     {"setWorldTransform", (PyCFunction)RigidBody_setWorldTransform, METH_VARARGS, NULL },
 
     {NULL, NULL, 0, NULL}
