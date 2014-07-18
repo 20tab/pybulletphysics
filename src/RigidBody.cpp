@@ -155,6 +155,11 @@ RigidBody_setWorldTransform(bulletphysics_RigidBodyObject *self, PyObject *args,
 }
 
 static PyObject *
+RigidBody_getWorldTransform(bulletphysics_RigidBodyObject *self, PyObject *args, PyObject *kwds) {
+    return new_pytransform_from_transform(self->rigidBody->getWorldTransform());
+}
+
+static PyObject *
 RigidBody_setLinearVelocity(bulletphysics_RigidBodyObject *self, PyObject *args, PyObject *kwds) {
     PyObject *py_vector3 = NULL;
     if (!PyArg_ParseTuple(args, "O", &py_vector3)) {
