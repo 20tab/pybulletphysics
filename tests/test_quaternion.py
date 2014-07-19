@@ -22,6 +22,14 @@ class QuaternionTest(unittest.TestCase):
         self.assertEqual(1.8, round(q.getZ(), 2))
         self.assertEqual(0.4, round(q.getW(), 2))
 
+    def test_quatRotate(self):
+        v = Vector3(1, 2, 3)
+        rv = Quaternion.quatRotate(self.quaternion, self.quaternion, v)
+        self.assertEqual(30.0, round(rv.getX(), 2))
+        self.assertEqual(60.0, round(rv.getY(), 2))
+        self.assertEqual(90.0, round(rv.getZ(), 2))
+        
+
 def test_suite():
     return unittest.TestLoader().loadTestsFromName(__name__)
 

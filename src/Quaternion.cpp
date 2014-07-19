@@ -105,6 +105,18 @@ Quaternion_setRotation(bulletphysics_QuaternionObject *self, PyObject *args, PyO
 }
 
 static PyObject *
+Quaternion_quatRotate(bulletphysics_QuaternionObject *self, PyObject *args, PyObject *kwds) {
+        bulletphysics_QuaternionObject *py_quaternion = NULL;
+        bulletphysics_Vector3Object *py_vector3 = NULL;
+        if (!PyArg_ParseTuple(args, "OO", &py_quaternion, &py_vector3)) {
+                return NULL;
+        }
+        pybulletphysics_checktype(py_quaternion, Quaternion);
+        pybulletphysics_checktype(py_vector3, Vector3);
+	return new_pyvector3_from_vector(quatRotate(*(py_quaternion->quaternion), *(py_vector3->vector)));
+}
+
+static PyObject *
 Quaternion_setEuler(bulletphysics_QuaternionObject *self, PyObject *args, PyObject *kwds) {
 	float x = 0.0;
 	float y = 0.0;
@@ -127,6 +139,7 @@ static PyMethodDef Quaternion_methods[] = {
     {"getAngle", (PyCFunction)Quaternion_getAngle, METH_VARARGS, NULL },
     {"setRotation", (PyCFunction)Quaternion_setRotation, METH_VARARGS, NULL },
     {"setEuler", (PyCFunction)Quaternion_setEuler, METH_VARARGS, NULL },
+    {"quatRotate", (PyCFunction)Quaternion_quatRotate, METH_VARARGS, NULL },
     {NULL, NULL, 0, NULL}
 };
 
