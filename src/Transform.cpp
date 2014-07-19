@@ -9,7 +9,8 @@ Transform_dealloc(bulletphysics_TransformObject* self)
 	// vector will be freed by the transform
 	self->origin->vector = NULL;
 	Py_DECREF(self->origin);
-        delete(self->transform);
+	// do not free it !!
+        //delete(self->transform);
         self->ob_type->tp_free((PyObject*)self);
 }
 
