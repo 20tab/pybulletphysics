@@ -77,9 +77,9 @@ Vector3_add(bulletphysics_Vector3Object *self, PyObject *py_vector3) {
 }
 
 static PyObject *
-Vector3_mul(bulletphysics_Vector3Object *self, PyObject *py_vector3) {
-        pybulletphysics_checktype(py_vector3, Vector3);
-        return new_pyvector3_from_vector( *self->vector * *(((bulletphysics_Vector3Object *)py_vector3)->vector));
+Vector3_mul(bulletphysics_Vector3Object *self, PyObject *py_v) {
+        pybulletphysics_checktype(py_v, Vector3);
+        return new_pyvector3_from_vector( *self->vector * *(((bulletphysics_Vector3Object *)py_v)->vector));
 }
 
 static PyObject *
