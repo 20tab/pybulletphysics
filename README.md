@@ -1,7 +1,7 @@
 pybulletphysics
 ===============
 
-A Python wrapper for the [Bullet Physics](http://bulletphysics.org/) 2.x library. (merged into [bullet3 repository](https://github.com/bulletphysics/bullet3))
+A Python wrapper for the [Bullet Physics](http://bulletphysics.org/) 2.x library. (note that 2.x version was merged into [bullet 3.x repository](https://github.com/bulletphysics/bullet3))
 
 Installation
 ------------
